@@ -12,4 +12,4 @@ An English-only, single-page web security quiz with exactly 100 multiple-choice 
 
 ---
 
-you can see -> (WSTG)[https://mohammadalimehri.github.io/WSTG_QUIZ/]
+you can see -> [WSTG](https://mohammadalimehri.github.io/WSTG_QUIZ/)
