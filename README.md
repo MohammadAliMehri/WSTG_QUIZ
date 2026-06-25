@@ -1,33 +1,28 @@
 # WSTG Quiz
 
-یک کوییز استاندارد و تک‌صفحه‌ای درباره مفاهیم پایه امنیت وب، بازنویسی‌شده با ظاهر حرفه‌ای‌تر و تجربه کاربری تمیزتر.
+An English-only, single-page web security quiz with exactly 100 multiple-choice questions.
 
-## امکانات
+## Features
 
-- رابط کاربری responsive برای موبایل و دسکتاپ
-- نمایش یک سؤال در هر مرحله
-- نشان‌دادن پاسخ درست و توضیح کوتاه بعد از انتخاب
-- صفحه نتیجه نهایی همراه با مرور پاسخ‌های درست
-- مناسب برای انتشار در GitHub Pages
+- 100 standard-level web security questions
+- Immediate feedback after each answer
+- Progress tracking and final score summary
+- Fully static (no build step, no dependencies)
+- Ready to publish on GitHub Pages
 
-## اجرا
+## Run Locally
 
-فایل `index.html` را در مرورگر باز کنید یا پروژه را روی GitHub Pages منتشر کنید.
+Open `index.html` in any modern browser.
 
-## انتشار روی GitHub Pages
+## Deploy to GitHub Pages
 
-1. یک repository جدید در GitHub بسازید.
-2. فایل‌های این پوشه را به repository push کنید.
-3. در بخش Settings > Pages، شاخه `main` و مسیر `/root` را انتخاب کنید.
-4. چند دقیقه صبر کنید تا لینک سایت فعال شود.
+1. Push this repository to GitHub.
+2. Open repository `Settings`.
+3. Go to `Pages`.
+4. Select branch `master` (or `main`, based on your repository), folder `/root`.
+5. Save and wait for GitHub Pages to publish.
 
-## پیش‌نمایش
+## Project Structure
 
-نسخه آنلاین پروژه را می‌توانید از این آدرس ببینید:
-
-[WSTG Quiz Demo](https://mohammadalimehri.github.io/WSTG_QUIZ/)
-
-## ساختار
-
-- `index.html` - اپلیکیشن اصلی کوییز
-- `README.md` - توضیحات پروژه و راه‌اندازی
+- `index.html` - complete quiz app (UI + logic + question bank)
+- `README.md` - project documentation

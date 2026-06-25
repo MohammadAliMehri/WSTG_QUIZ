@@ -1,234 +1,152 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>کوییز استاندارد امنیت وب</title>
+  <title>Web Security Quiz - 100 Questions</title>
   <style>
     :root {
-      color-scheme: light;
-      --bg: #07111f;
-      --panel: rgba(11, 21, 36, 0.84);
-      --panel-border: rgba(148, 163, 184, 0.16);
-      --text: #e5eefc;
-      --muted: #9fb0c7;
-      --accent: #4cc9f0;
-      --accent-2: #f9c74f;
+      --bg-1: #08111f;
+      --bg-2: #10223d;
+      --card: rgba(9, 20, 36, 0.88);
+      --line: rgba(148, 163, 184, 0.2);
+      --text: #e6edf7;
+      --muted: #9fb1cb;
+      --primary: #4cc9f0;
+      --accent: #f9c74f;
       --good: #2dd4bf;
       --bad: #fb7185;
-      --shadow: 0 24px 80px rgba(2, 8, 23, 0.45);
-      --radius-xl: 28px;
       --radius-lg: 22px;
       --radius-md: 16px;
     }
 
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Tahoma", "Segoe UI", sans-serif;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: var(--text);
       background:
         radial-gradient(circle at top right, rgba(76, 201, 240, 0.18), transparent 28%),
-        radial-gradient(circle at left center, rgba(249, 199, 79, 0.13), transparent 24%),
-        linear-gradient(160deg, #06101d 0%, #0b1830 52%, #08111d 100%);
-      color: var(--text);
+        radial-gradient(circle at left center, rgba(249, 199, 79, 0.12), transparent 24%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-2));
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-      background-size: 34px 34px;
-      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent 92%);
+    .container {
+      width: min(1080px, calc(100% - 32px));
+      margin: 22px auto;
+      padding: 18px;
     }
 
-    .shell {
-      width: min(1120px, calc(100% - 32px));
-      margin: 24px auto;
-      padding: 24px;
+    .hero,
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 20px 60px rgba(2, 8, 23, 0.45);
     }
 
     .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
-      gap: 18px;
-      margin-bottom: 18px;
-      align-items: stretch;
-    }
-
-    .hero-card,
-    .stats-card,
-    .quiz-card {
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-    }
-
-    .hero-card {
-      padding: 28px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .hero-card::after {
-      content: "";
-      position: absolute;
-      inset: auto -80px -110px auto;
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(76, 201, 240, 0.2), transparent 68%);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      color: #b9ecff;
-      background: rgba(76, 201, 240, 0.12);
-      border: 1px solid rgba(76, 201, 240, 0.22);
-      font-size: 0.84rem;
-      margin-bottom: 14px;
-    }
-
-    h1 {
-      margin: 0 0 12px;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      line-height: 1.25;
-    }
-
-    .hero-copy {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.9;
-      max-width: 62ch;
-    }
-
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 0.84rem;
-      color: #d6e6ff;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .stats-card {
-      padding: 22px;
-      display: grid;
-      gap: 14px;
-      align-content: center;
-    }
-
-    .stat {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 14px 16px;
-      border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .stat span:first-child {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .stat strong { font-size: 1rem; }
-
-    .progress-shell { margin: 18px 0 20px; }
-
-    .progress-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .progress-fill {
-      width: 0%;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      transition: width 0.35s ease;
-    }
-
-    .quiz-card {
       padding: 24px;
-      overflow: hidden;
-    }
-
-    .quiz-topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
       margin-bottom: 16px;
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 0.84rem;
-      color: #d7e5ff;
-      background: rgba(76, 201, 240, 0.1);
-      border: 1px solid rgba(76, 201, 240, 0.18);
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
     }
 
-    .question-counter {
+    .hero p {
+      margin: 0;
       color: var(--muted);
-      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+
+    .meta-row {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: #d4e4ff;
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .status-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .status-item {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+
+    .status-item strong {
+      display: block;
+      font-size: 1.15rem;
+    }
+
+    .status-item span {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .progress-wrap {
+      margin-bottom: 16px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 8px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width 0.3s ease;
     }
 
     .question-card {
+      border: 1px solid var(--line);
       border-radius: var(--radius-lg);
-      padding: 22px;
-      background: linear-gradient(180deg, rgba(12, 23, 40, 0.96), rgba(8, 17, 30, 0.96));
-      border: 1px solid rgba(148, 163, 184, 0.15);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 20px;
     }
 
-    .question-topic {
-      color: #9dd9ff;
+    .topic {
+      color: #b8dfff;
       font-size: 0.84rem;
       margin-bottom: 8px;
       letter-spacing: 0.02em;
@@ -236,419 +154,410 @@
 
     .question-text {
       margin: 0;
-      font-size: clamp(1.05rem, 2vw, 1.35rem);
-      line-height: 1.85;
-      color: #f5f8ff;
+      font-size: clamp(1.02rem, 2vw, 1.28rem);
+      line-height: 1.8;
       font-weight: 700;
     }
 
     .options {
+      margin-top: 14px;
       display: grid;
-      gap: 12px;
-      margin-top: 18px;
+      gap: 10px;
     }
 
-    .option-btn {
+    .option {
       width: 100%;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      border-radius: 18px;
-      padding: 14px 16px;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 14px;
       background: rgba(255, 255, 255, 0.04);
       color: var(--text);
+      padding: 12px 14px;
       cursor: pointer;
       display: flex;
-      gap: 12px;
       align-items: flex-start;
-      text-align: right;
-      transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
+      gap: 10px;
+      transition: transform 0.12s ease, border-color 0.12s ease;
     }
 
-    .option-btn:hover:not(.disabled) {
+    .option:hover:not(:disabled) {
       transform: translateY(-1px);
       border-color: rgba(76, 201, 240, 0.5);
-      box-shadow: 0 10px 24px rgba(2, 8, 23, 0.24);
-      background: rgba(255, 255, 255, 0.065);
     }
 
-    .option-btn:focus-visible,
-    .primary-btn:focus-visible {
-      outline: 3px solid rgba(76, 201, 240, 0.4);
-      outline-offset: 3px;
-    }
-
-    .option-index {
-      width: 32px;
-      height: 32px;
-      flex: 0 0 32px;
+    .index {
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.85rem;
-      font-weight: 700;
       background: rgba(255, 255, 255, 0.08);
-      color: #e5eefc;
+      flex: 0 0 30px;
+      font-size: 0.84rem;
+      font-weight: 700;
     }
 
-    .option-label {
+    .label {
+      line-height: 1.6;
       flex: 1;
-      line-height: 1.75;
-      font-size: 0.98rem;
-      color: #eef4ff;
     }
 
-    .option-state {
-      flex: 0 0 auto;
-      width: 12px;
-      height: 12px;
-      margin-top: 9px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.18);
+    .option.correct {
+      border-color: rgba(45, 212, 191, 0.75);
+      background: rgba(45, 212, 191, 0.16);
     }
 
-    .option-btn.correct {
-      border-color: rgba(45, 212, 191, 0.7);
-      background: rgba(45, 212, 191, 0.12);
-    }
-
-    .option-btn.incorrect {
+    .option.incorrect {
       border-color: rgba(251, 113, 133, 0.75);
-      background: rgba(251, 113, 133, 0.12);
-    }
-
-    .option-btn.correct .option-state { background: var(--good); }
-    .option-btn.incorrect .option-state { background: var(--bad); }
-
-    .option-btn.disabled {
-      pointer-events: none;
-      opacity: 0.96;
+      background: rgba(251, 113, 133, 0.16);
     }
 
     .feedback {
       display: none;
-      margin-top: 16px;
-      padding: 16px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #d4e0f2;
-      line-height: 1.9;
-    }
-
-    .feedback strong { color: #fff2a8; }
-
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .score-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      color: #d6e6ff;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .primary-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 12px 18px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      color: #06101d;
-      font-weight: 800;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 16px 30px rgba(76, 201, 240, 0.2);
-      transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease;
-    }
-
-    .primary-btn:hover:not(:disabled) {
-      transform: translateY(-1px);
-      filter: brightness(1.03);
-      box-shadow: 0 18px 34px rgba(249, 199, 79, 0.24);
-    }
-
-    .primary-btn:disabled {
-      cursor: not-allowed;
-      opacity: 0.52;
-      box-shadow: none;
-    }
-
-    .result-grid {
-      display: grid;
-      gap: 16px;
-      text-align: center;
-      padding: 14px 0 4px;
-    }
-
-    .result-score {
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      font-weight: 900;
-      line-height: 1;
-      background: linear-gradient(90deg, #ffffff, #9dd9ff 45%, #fff2a8 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .result-title {
-      margin: 0;
-      font-size: 1.3rem;
-    }
-
-    .result-text {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.9;
-    }
-
-    .review-list {
-      display: grid;
-      gap: 10px;
-      text-align: right;
-      margin-top: 6px;
-    }
-
-    .review-item {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
       padding: 12px 14px;
-      border-radius: 16px;
       background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.07);
       color: #d7e5ff;
       line-height: 1.7;
-      font-size: 0.94rem;
     }
 
-    .review-item strong { color: #fff2a8; }
-
-    .muted-small {
-      color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.8;
-      margin: 0;
+    .feedback strong {
+      color: #fff5b8;
     }
 
-    .start-screen {
-      display: grid;
-      gap: 16px;
-      align-content: start;
-    }
-
-    .start-panel {
-      padding: 24px;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(180deg, rgba(12, 23, 40, 0.94), rgba(8, 17, 30, 0.94));
-      border: 1px solid rgba(148, 163, 184, 0.15);
-    }
-
-    .start-actions {
+    .control-row {
+      margin-top: 14px;
       display: flex;
+      justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: 18px;
+      align-items: center;
     }
 
-    .ghost-btn {
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.03);
-      color: var(--text);
+    .score {
+      padding: 9px 12px;
       border-radius: 999px;
-      padding: 12px 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: #d4e4ff;
+    }
+
+    button.primary,
+    button.secondary {
+      border: none;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font: inherit;
       font-weight: 700;
       cursor: pointer;
     }
 
-    .hidden { display: none !important; }
-
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
+    button.primary {
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      color: #05101e;
     }
 
-    @media (max-width: 640px) {
-      .shell {
-        width: min(100%, calc(100% - 16px));
+    button.primary:disabled {
+      opacity: 0.52;
+      cursor: not-allowed;
+    }
+
+    button.secondary {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+    }
+
+    .result {
+      text-align: center;
+      display: grid;
+      gap: 12px;
+    }
+
+    .result h2 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    .percent {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 800;
+      color: #fff7c5;
+    }
+
+    .result p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    @media (max-width: 780px) {
+      .status-row {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        width: calc(100% - 16px);
         margin: 8px auto;
         padding: 8px;
-      }
-
-      .hero-card,
-      .quiz-card,
-      .stats-card,
-      .start-panel {
-        border-radius: 20px;
-        padding: 18px;
-      }
-
-      .question-card { padding: 18px; }
-
-      .controls { align-items: stretch; }
-
-      .primary-btn,
-      .ghost-btn {
-        width: 100%;
-        justify-content: center;
       }
     }
   </style>
 </head>
 <body>
-  <main class="shell">
+  <main class="container">
     <section class="hero">
-      <article class="hero-card">
-        <div class="eyebrow">کوییز استاندارد سطح متوسط</div>
-        <h1>کوییز امنیت وب با ظاهر حرفه‌ای و تجربه کاربری ساده</h1>
-        <p class="hero-copy">
-          این نسخه برای ارائه روی GitHub بازنویسی شده است: سؤال‌ها کوتاه‌تر، سطح دشواری استانداردتر و چیدمان صفحه مناسب استفاده روی دسکتاپ و موبایل است.
-        </p>
-        <div class="hero-meta">
-          <span class="tag">۴ گزینه برای هر سؤال</span>
-          <span class="tag">نمایش توضیح پاسخ</span>
-          <span class="tag">مناسب GitHub Pages</span>
-        </div>
-      </article>
-
-      <aside class="stats-card">
-        <div class="stat"><span>تعداد سؤال</span><strong id="stat-total">12</strong></div>
-        <div class="stat"><span>نوع آزمون</span><strong>چندگزینه‌ای</strong></div>
-        <div class="stat"><span>سطح</span><strong>Standard</strong></div>
-      </aside>
+      <h1>Web Security Quiz</h1>
+      <p>
+        This is a standard-level quiz with exactly 100 multiple-choice questions.
+        It is fully in English and ready for GitHub Pages.
+      </p>
+      <div class="meta-row">
+        <span class="pill">100 Questions</span>
+        <span class="pill">English Only</span>
+        <span class="pill">No Build Required</span>
+      </div>
     </section>
 
-    <section class="quiz-card">
-      <div class="progress-shell">
-        <div class="progress-row">
-          <span id="question-counter-label">آماده شروع</span>
-          <span id="percent-label">۰٪ پیشرفت</span>
+    <section class="panel">
+      <div class="status-row">
+        <div class="status-item">
+          <strong id="stat-question">0 / 100</strong>
+          <span>Question</span>
         </div>
-        <div class="progress-bar" aria-hidden="true">
+        <div class="status-item">
+          <strong id="stat-score">0</strong>
+          <span>Correct Answers</span>
+        </div>
+        <div class="status-item">
+          <strong id="stat-progress">0%</strong>
+          <span>Progress</span>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span id="label-left">Ready to start</span>
+          <span id="label-right">0%</span>
+        </div>
+        <div class="progress-track">
           <div class="progress-fill" id="progress-fill"></div>
         </div>
       </div>
 
-      <section id="start-screen" class="start-screen">
-        <div class="start-panel">
-          <div class="badge">شروع سریع</div>
-          <p class="muted-small" style="margin-top: 12px;">
-            روی دکمه زیر بزنید تا آزمون آغاز شود. هر سؤال فقط یک پاسخ درست دارد و بعد از انتخاب، توضیح کوتاه نمایش داده می‌شود.
-          </p>
-          <div class="start-actions">
-            <button class="primary-btn" id="start-btn" type="button">شروع آزمون</button>
-            <button class="ghost-btn" id="shuffle-btn" type="button">ترتیب تصادفی سؤال‌ها</button>
-          </div>
-        </div>
-      </section>
-
-      <div id="quiz-area" class="hidden"></div>
+      <div id="app"></div>
     </section>
   </main>
 
   <script>
-    const baseQuestions = [
-      { topic: "مفاهیم پایه", question: "کدام گزینه بهترین توصیف برای HTTPS است؟", options: ["نسخه سریع‌تر HTTP", "HTTP همراه با رمزنگاری و اعتبارسنجی گواهی", "ابزاری برای تغییر ظاهر سایت", "پروتکل مخصوص دانلود فایل"], correctIndex: 1, explanation: "HTTPS با استفاده از TLS داده‌ها را رمزنگاری می‌کند و جلوی شنود و دستکاری ترافیک را می‌گیرد." },
-      { topic: "اعتبارسنجی ورودی", question: "هدف اصلی اعتبارسنجی ورودی چیست؟", options: ["زیباتر شدن فرم‌ها", "جلوگیری از ورود داده‌های غیرمنتظره یا خطرناک به منطق برنامه", "افزایش حجم پاسخ", "فعال‌کردن کش مرورگر"], correctIndex: 1, explanation: "اعتبارسنجی ورودی کمک می‌کند داده فقط در قالب مورد انتظار وارد برنامه شود و احتمال تزریق کاهش یابد." },
-      { topic: "SQL Injection", question: "کدام روش برای کاهش SQL Injection مناسب‌تر است؟", options: ["چسباندن مستقیم ورودی کاربر به رشته کوئری", "استفاده از Prepared Statement", "فقط حذف فاصله‌ها", "تغییر فونت فرم"], correctIndex: 1, explanation: "Prepared Statement باعث می‌شود ورودی به عنوان داده پردازش شود، نه بخشی از دستور SQL." },
-      { topic: "XSS", question: "XSS معمولاً چه زمانی رخ می‌دهد؟", options: ["وقتی داده کاربر بدون خروجی امن در HTML یا DOM نمایش داده شود", "وقتی سرور خاموش باشد", "وقتی DNS خراب شود", "وقتی صفحه راست‌چین باشد"], correctIndex: 0, explanation: "اگر داده کاربر escape نشود، مرورگر می‌تواند آن را به عنوان کد اجرا کند." },
-      { topic: "احراز هویت", question: "کدام مورد به امنیت ورود کاربر کمک می‌کند؟", options: ["پسورد ساده و کوتاه", "استفاده از رمز عبور قوی و MFA", "نمایش رمز روی صفحه", "غیرفعال کردن لاگین امن"], correctIndex: 1, explanation: "رمز قوی و احراز هویت چندمرحله‌ای احتمال سوءاستفاده از حساب را کاهش می‌دهد." },
-      { topic: "Session", question: "بعد از لاگین، چرا باید Session ID تغییر کند؟", options: ["برای افزایش سرعت سایت", "برای کاهش احتمال Session Fixation", "برای حذف کوکی‌ها", "برای فعال‌کردن CSS"], correctIndex: 1, explanation: "با تغییر Session ID بعد از ورود، شناسه‌ای که شاید قبلاً لو رفته باشد دیگر قابل سوءاستفاده نیست." },
-      { topic: "CSRF", question: "بهترین راه پایه برای کاهش CSRF چیست؟", options: ["استفاده از رنگ متفاوت دکمه‌ها", "استفاده از CSRF Token و SameSite روی کوکی", "غیرفعال کردن HTML", "فقط افزایش اندازه فرم"], correctIndex: 1, explanation: "توکن CSRF جلوی ارسال ناخواسته درخواست معتبر از دامنه‌های دیگر را می‌گیرد." },
-      { topic: "هدرهای امنیتی", question: "کدام هدر برای کاهش Clickjacking مفید است؟", options: ["X-Frame-Options", "Server", "Content-Length", "Accept-Language"], correctIndex: 0, explanation: "X-Frame-Options یا frame-ancestors در CSP مانع نمایش سایت در iframe دامنه‌های دیگر می‌شوند." },
-      { topic: "مدیریت خطا", question: "نمایش Stack Trace خام به کاربر چه ریسکی دارد؟", options: ["فقط ظاهر صفحه را بهتر می‌کند", "اطلاعات داخلی برنامه را افشا می‌کند", "فقط سرعت سرور را افزایش می‌دهد", "هیچ اثری ندارد"], correctIndex: 1, explanation: "Stack Trace می‌تواند مسیر فایل‌ها، نام کلاس‌ها و جزئیات داخلی پیاده‌سازی را لو بدهد." },
-      { topic: "رمزنگاری", question: "کدام مورد نشانه تنظیم ضعیف TLS است؟", options: ["استفاده از نسخه‌های قدیمی و آسیب‌پذیر مثل SSLv3", "استفاده از HTTPS معتبر", "فعال بودن HSTS", "استفاده از گواهی معتبر"], correctIndex: 0, explanation: "پروتکل‌ها و cipherهای قدیمی باید غیرفعال شوند تا خطر حملات شناخته‌شده کم شود." },
-      { topic: "Business Logic", question: "نمونه‌ای از ضعف منطق کسب‌وکار چیست؟", options: ["اجازه دادن به مقدار منفی برای مبلغ پرداخت", "استفاده از HTTPS", "اعتبارسنجی فرم", "ذخیره امن رمز عبور"], correctIndex: 0, explanation: "منطق کسب‌وکار باید از ورودی‌های غیرمنطقی مثل مبلغ منفی یا تعداد غیرعادی جلوگیری کند." },
-      { topic: "API Security", question: "برای یک API عمومی، کدام ترکیب مهم‌تر است؟", options: ["فقط داکیومنت زیبا", "احراز هویت مناسب و Rate Limiting", "فونت اختصاصی", "حذف همه پاسخ‌های JSON"], correctIndex: 1, explanation: "API بدون احراز هویت و محدودیت نرخ، راحت‌تر هدف حملات خودکار و سوءاستفاده قرار می‌گیرد." }
+    const questions = [
+      { topic: "Fundamentals", question: "What does HTTPS primarily provide?", options: ["Client-side storage", "Encrypted transport", "Faster JavaScript", "Automatic backups"], correctIndex: 1, explanation: "HTTPS uses TLS to encrypt data in transit." },
+      { topic: "Fundamentals", question: "Which HTTP method is typically used to retrieve data?", options: ["POST", "DELETE", "GET", "PUT"], correctIndex: 2, explanation: "GET is intended for fetching resources." },
+      { topic: "Fundamentals", question: "What is the main goal of input validation?", options: ["Improve UI colors", "Reject unexpected or dangerous input", "Increase page rank", "Change DNS"], correctIndex: 1, explanation: "Input validation enforces allowed formats and values." },
+      { topic: "Fundamentals", question: "Which component should enforce access control?", options: ["Browser CSS", "Server-side logic", "README file", "CDN image cache"], correctIndex: 1, explanation: "Authorization must be enforced on the server." },
+      { topic: "Fundamentals", question: "What is least privilege?", options: ["No authentication", "Only required access rights", "Full admin for all users", "Public database credentials"], correctIndex: 1, explanation: "Users should receive only minimal permissions needed." },
+      { topic: "Fundamentals", question: "What is a threat model used for?", options: ["Compress images", "Identify risks and attack paths", "Set font sizes", "Deploy SSL certs automatically"], correctIndex: 1, explanation: "Threat modeling helps prioritize security controls." },
+      { topic: "Fundamentals", question: "What is defense in depth?", options: ["One firewall only", "Multiple security layers", "No logging", "Single-factor auth"], correctIndex: 1, explanation: "Layered controls reduce single-point failures." },
+      { topic: "Fundamentals", question: "What does CIA stand for in security?", options: ["Control, Integrate, Audit", "Confidentiality, Integrity, Availability", "Cipher, Identity, Access", "Cloud, Internet, API"], correctIndex: 1, explanation: "CIA is the classic information security triad." },
+      { topic: "Fundamentals", question: "Why is security logging important?", options: ["Only for design", "Detect and investigate incidents", "Speed up page load", "Replace testing"], correctIndex: 1, explanation: "Logs provide evidence and operational visibility." },
+      { topic: "Fundamentals", question: "Which is a secure default?", options: ["Allow all traffic", "Deny by default", "Store plaintext passwords", "Disable updates"], correctIndex: 1, explanation: "Secure systems should start restrictive, then allow needed access." },
+
+      { topic: "Authentication", question: "What is MFA?", options: ["Multiple file access", "Multi-factor authentication", "Managed firewall app", "Manual form approval"], correctIndex: 1, explanation: "MFA uses two or more verification factors." },
+      { topic: "Authentication", question: "Which password is strongest?", options: ["password123", "Summer2024", "8u#Pq!2mZr@1", "qwerty"], correctIndex: 2, explanation: "Strong passwords are long and hard to guess." },
+      { topic: "Authentication", question: "Why avoid password reuse?", options: ["It improves SEO", "A breach on one site can compromise others", "It breaks cookies", "It disables TLS"], correctIndex: 1, explanation: "Credential stuffing exploits reused passwords." },
+      { topic: "Authentication", question: "What is account lockout used for?", options: ["Speed up login", "Limit brute-force attempts", "Increase bandwidth", "Store API keys"], correctIndex: 1, explanation: "Lockout or throttling reduces repeated guess attempts." },
+      { topic: "Authentication", question: "What should happen after successful login regarding session ID?", options: ["Keep same ID forever", "Regenerate session ID", "Expose ID in URL", "Share ID with analytics"], correctIndex: 1, explanation: "Session ID regeneration helps prevent fixation." },
+      { topic: "Authentication", question: "What is credential stuffing?", options: ["Compressing passwords", "Using leaked credentials on many sites", "Encrypting cookies", "Resetting accounts"], correctIndex: 1, explanation: "Attackers automate login attempts with breached username/password pairs." },
+      { topic: "Authentication", question: "Which is safer for password storage?", options: ["Plaintext", "Reversible encryption", "Salted password hashing", "Base64 encoding"], correctIndex: 2, explanation: "Passwords should be hashed with strong adaptive algorithms and salt." },
+      { topic: "Authentication", question: "What is a password reset best practice?", options: ["Permanent reset links", "Single-use, short-lived reset tokens", "Send old password by email", "No user verification"], correctIndex: 1, explanation: "Reset tokens should expire quickly and be one-time use." },
+      { topic: "Authentication", question: "Why should login errors be generic?", options: ["To hide branding", "To reduce username enumeration", "To disable logs", "To improve caching"], correctIndex: 1, explanation: "Generic messages avoid revealing whether an account exists." },
+      { topic: "Authentication", question: "What is phishing-resistant MFA?", options: ["SMS only", "Security keys using WebAuthn/FIDO2", "No second factor", "CAPTCHA only"], correctIndex: 1, explanation: "Hardware-backed, origin-bound MFA is harder to phish." },
+
+      { topic: "Session", question: "What does HttpOnly on cookies help prevent?", options: ["Network sniffing", "JavaScript access to cookie", "SQL injection", "DNS poisoning"], correctIndex: 1, explanation: "HttpOnly blocks document.cookie access from JS." },
+      { topic: "Session", question: "What does Secure on a cookie enforce?", options: ["Local storage encryption", "Send cookie only over HTTPS", "Short password length", "CORS preflight"], correctIndex: 1, explanation: "Secure cookies are not sent over plain HTTP." },
+      { topic: "Session", question: "What does SameSite reduce?", options: ["XSS", "CSRF risk", "DNS TTL", "JWT size"], correctIndex: 1, explanation: "SameSite limits cross-site cookie sending behavior." },
+      { topic: "Session", question: "What is session fixation?", options: ["Changing CSS after login", "Attacker sets victim session ID before auth", "Expiring cookies too fast", "Using CSP"], correctIndex: 1, explanation: "If session ID is not rotated, attacker may hijack authenticated session." },
+      { topic: "Session", question: "What should logout do?", options: ["Hide button only", "Invalidate server session and clear cookie", "Close browser only", "Disable JavaScript"], correctIndex: 1, explanation: "Logout should terminate session state on the server." },
+      { topic: "Session", question: "Why set idle session timeout?", options: ["Improve typography", "Reduce risk from unattended sessions", "Enable DNSSEC", "Increase API throughput"], correctIndex: 1, explanation: "Inactive sessions should expire to limit abuse." },
+      { topic: "Session", question: "Which token location is generally safer than localStorage for auth in browsers?", options: ["URL fragment", "HttpOnly secure cookie", "Window name", "Referrer header"], correctIndex: 1, explanation: "HttpOnly cookies reduce token exposure to XSS scripts." },
+      { topic: "Session", question: "What should happen after password change?", options: ["Keep all old sessions", "Revoke existing sessions", "Disable TLS", "Expose account ID"], correctIndex: 1, explanation: "Security-sensitive changes should invalidate active sessions." },
+      { topic: "Session", question: "Which is a session anti-pattern?", options: ["Random high-entropy IDs", "Session IDs in URLs", "Regenerating IDs", "Short token lifetimes"], correctIndex: 1, explanation: "URL-based session IDs leak through logs and referrers." },
+      { topic: "Session", question: "What property should a session ID have?", options: ["Predictable sequence", "High entropy and unpredictability", "Username embedded", "Timestamp only"], correctIndex: 1, explanation: "Unpredictable IDs resist guessing attacks." },
+
+      { topic: "Authorization", question: "What is IDOR?", options: ["Random DNS record", "Accessing another users object by changing identifier", "A TLS extension", "A CSS issue"], correctIndex: 1, explanation: "Insecure Direct Object Reference occurs when object ownership is not enforced." },
+      { topic: "Authorization", question: "What is vertical privilege escalation?", options: ["Moving from user to admin", "Changing from GET to POST", "Switching regions", "Resetting password"], correctIndex: 0, explanation: "Vertical escalation means gaining higher privilege level." },
+      { topic: "Authorization", question: "What is horizontal privilege escalation?", options: ["Admin to user", "Accessing peer user data", "Cross-origin image load", "Cache poisoning"], correctIndex: 1, explanation: "Horizontal escalation accesses resources of users at same privilege level." },
+      { topic: "Authorization", question: "What is deny-by-default in authorization?", options: ["Allow all then audit", "Block unless explicitly permitted", "Disable login", "Use only frontend checks"], correctIndex: 1, explanation: "Requests should be denied unless policy grants access." },
+      { topic: "Authorization", question: "Why are UI-only permission checks unsafe?", options: ["UI is slow", "Attackers can call backend endpoints directly", "CSS blocks access", "CDN strips tokens"], correctIndex: 1, explanation: "Authorization must be validated on the server for each request." },
+      { topic: "Authorization", question: "What is RBAC?", options: ["Random binary access", "Role-based access control", "Remote browser auth cookie", "Reactive backup API"], correctIndex: 1, explanation: "RBAC grants permissions based on roles." },
+      { topic: "Authorization", question: "What is ABAC?", options: ["Allow all basic access", "Attribute-based access control", "Anonymous browser authorization cookie", "Anti-bruteforce access count"], correctIndex: 1, explanation: "ABAC evaluates attributes and policy rules." },
+      { topic: "Authorization", question: "What is a common API authorization bug?", options: ["Using JSON", "Missing object-level authorization", "Using UTF-8", "Using HTTPS"], correctIndex: 1, explanation: "Each object access must verify ownership or permission." },
+      { topic: "Authorization", question: "What should be logged on authorization failures?", options: ["Nothing", "Relevant context for investigation", "Only response size", "Only CSS errors"], correctIndex: 1, explanation: "Security logs should include actionable context without sensitive data leakage." },
+      { topic: "Authorization", question: "What is policy drift?", options: ["Changing page layouts", "Inconsistent access rules across services", "DNS propagation", "Token rotation"], correctIndex: 1, explanation: "Inconsistent enforcement can open bypass paths." },
+
+      { topic: "XSS", question: "What is reflected XSS?", options: ["Payload stored permanently", "Payload reflected immediately in response", "No browser involved", "DNS redirect"], correctIndex: 1, explanation: "Reflected XSS appears in immediate server response." },
+      { topic: "XSS", question: "What is stored XSS?", options: ["Payload never saved", "Payload saved and served to users later", "Only in CSS", "Only in headers"], correctIndex: 1, explanation: "Stored XSS persists in backend storage." },
+      { topic: "XSS", question: "What is DOM XSS?", options: ["Server template issue only", "Client-side script writes unsafe data to DOM", "TLS handshake failure", "Cookie timeout"], correctIndex: 1, explanation: "DOM XSS happens in browser-side JavaScript execution context." },
+      { topic: "XSS", question: "Which sink is often dangerous with untrusted input?", options: ["textContent", "innerHTML", "setAttribute with fixed values", "console.log"], correctIndex: 1, explanation: "innerHTML parses markup and can execute scripts in some contexts." },
+      { topic: "XSS", question: "Which control reduces script source abuse?", options: ["CSP", "DNSSEC", "ETag", "gzip"], correctIndex: 0, explanation: "Content Security Policy can restrict script sources and behaviors." },
+      { topic: "XSS", question: "Why is output encoding context-specific?", options: ["All contexts use same rules", "HTML, JS, URL, and CSS contexts differ", "Encoding is optional", "It only matters in APIs"], correctIndex: 1, explanation: "The correct encoding depends on where data is placed." },
+      { topic: "XSS", question: "What is a safe default for inserting user text into page?", options: ["innerHTML", "textContent", "document.write", "eval"], correctIndex: 1, explanation: "textContent treats content as text, not markup." },
+      { topic: "XSS", question: "What does sanitization do?", options: ["Encrypt network traffic", "Remove or neutralize unsafe HTML content", "Rotate sessions", "Reduce token length"], correctIndex: 1, explanation: "Sanitization can allow safe formatting while blocking dangerous constructs." },
+      { topic: "XSS", question: "Which is a common impact of XSS?", options: ["CPU overheating", "Session theft and account takeover", "DNS update", "SSL issuance"], correctIndex: 1, explanation: "XSS can run attacker JavaScript in user context." },
+      { topic: "XSS", question: "What is template auto-escaping?", options: ["Manual string concatenation", "Framework feature escaping output by default", "Database encryption", "Header compression"], correctIndex: 1, explanation: "Auto-escaping reduces accidental XSS in templates." },
+
+      { topic: "Injection", question: "What is SQL injection?", options: ["Broken image URL", "Untrusted input altering SQL query logic", "Cookie overflow", "DNS rebinding"], correctIndex: 1, explanation: "Injection occurs when input changes intended query structure." },
+      { topic: "Injection", question: "Best primary defense for SQL injection?", options: ["Regex only", "Parameterized queries", "Hiding errors", "Long URL paths"], correctIndex: 1, explanation: "Parameterized queries keep data separate from code." },
+      { topic: "Injection", question: "What is command injection?", options: ["Editing markdown", "Executing OS commands with unsanitized input", "Changing HTTP methods", "TLS downgrade"], correctIndex: 1, explanation: "Unsafely passing input to shell commands can lead to remote code execution." },
+      { topic: "Injection", question: "What is LDAP injection?", options: ["Invalid CSS", "Manipulating LDAP queries via input", "Cookie replay", "Path compression"], correctIndex: 1, explanation: "Improperly handled input can alter directory query logic." },
+      { topic: "Injection", question: "What is NoSQL injection?", options: ["Only SQL databases", "Manipulating NoSQL query operators", "Missing favicon", "Session timeout"], correctIndex: 1, explanation: "Untrusted input can alter query selectors or operators." },
+      { topic: "Injection", question: "Which is safer than shell command construction with user input?", options: ["String concat in shell", "Using safe APIs without shell", "Base64 encode input only", "No validation"], correctIndex: 1, explanation: "Avoid shell invocation where possible; use dedicated library calls." },
+      { topic: "Injection", question: "What is XXE?", options: ["Cross XML event", "XML external entity abuse", "Extra executable extension", "Extended XSS engine"], correctIndex: 1, explanation: "XXE abuses XML parser entity resolution behavior." },
+      { topic: "Injection", question: "How to reduce XXE risk?", options: ["Enable external entities", "Disable DTD and external entities", "Use longer URLs", "Disable cookies"], correctIndex: 1, explanation: "Secure parser settings prevent external entity expansion." },
+      { topic: "Injection", question: "What is template injection?", options: ["Server-side template expression execution", "Image resizing issue", "DNS cache", "HTTP redirect"], correctIndex: 0, explanation: "Injected expressions can be evaluated by template engines." },
+      { topic: "Injection", question: "What is a key sign of injection risk?", options: ["Untrusted input concatenated into interpretable commands", "Using HTTPS", "Using pagination", "Using logging"], correctIndex: 0, explanation: "Code/data boundary violations are the core injection pattern." },
+
+      { topic: "CSRF", question: "What is CSRF?", options: ["Client-side rendering format", "Forged state-changing request from victim browser", "Cookie signing routine", "Cross subnet file replication"], correctIndex: 1, explanation: "CSRF tricks browser into sending authenticated requests." },
+      { topic: "CSRF", question: "What makes CSRF possible?", options: ["No browser cookies", "Automatic credential sending by browser", "Use of CDN", "Strong CSP"], correctIndex: 1, explanation: "Browsers attach cookies automatically to matching requests." },
+      { topic: "CSRF", question: "Best CSRF defense for forms?", options: ["Only captcha", "Anti-CSRF token validation", "Disable CSS", "Long usernames"], correctIndex: 1, explanation: "Per-request or per-session tokens verify request origin intent." },
+      { topic: "CSRF", question: "Which HTTP method should be used for state changes?", options: ["GET", "POST/PUT/PATCH/DELETE", "HEAD", "OPTIONS"], correctIndex: 1, explanation: "State changes should avoid GET and require proper protections." },
+      { topic: "CSRF", question: "How does SameSite help CSRF?", options: ["Encrypts payload", "Restricts cross-site cookie sending", "Hashes password", "Hides response body"], correctIndex: 1, explanation: "SameSite limits when cookies are sent across site boundaries." },
+      { topic: "CSRF", question: "Should API endpoints that use cookies consider CSRF?", options: ["No, APIs never need it", "Yes, if browser automatically sends auth cookies", "Only for image endpoints", "Only in localhost"], correctIndex: 1, explanation: "Cookie-authenticated APIs in browsers are vulnerable without anti-CSRF controls." },
+      { topic: "CSRF", question: "What is double submit cookie pattern?", options: ["Two passwords", "Matching token in cookie and request parameter/header", "Two factor auth", "Two domains"], correctIndex: 1, explanation: "Server checks both values match and are expected." },
+      { topic: "CSRF", question: "Which action should require re-authentication?", options: ["Viewing homepage", "Changing email or password", "Loading logo", "Health check"], correctIndex: 1, explanation: "Sensitive account actions should have stronger confirmation." },
+      { topic: "CSRF", question: "What header often helps distinguish script-driven requests?", options: ["Origin or Referer checks", "Content-Length", "Accept", "ETag"], correctIndex: 0, explanation: "Origin/Referer validation can supplement token defenses." },
+      { topic: "CSRF", question: "Can CSRF tokens replace authorization checks?", options: ["Yes", "No", "Only on weekends", "Only for APIs"], correctIndex: 1, explanation: "CSRF defenses and authorization checks solve different problems." },
+
+      { topic: "CORS", question: "What does CORS control?", options: ["Server CPU usage", "Which origins can read cross-origin responses", "Password length", "TLS ciphers"], correctIndex: 1, explanation: "CORS governs browser access to cross-origin responses." },
+      { topic: "CORS", question: "Why is Access-Control-Allow-Origin: * risky with credentials?", options: ["It is always blocked", "Credentials with wildcard are unsafe and not allowed", "It speeds up attacks", "It disables caching"], correctIndex: 1, explanation: "Credentialed requests require explicit trusted origins." },
+      { topic: "CORS", question: "What is a preflight request?", options: ["A DNS lookup", "OPTIONS check before non-simple request", "A TLS renegotiation", "A cookie cleanup"], correctIndex: 1, explanation: "Browsers send OPTIONS to verify cross-origin permissions." },
+      { topic: "CORS", question: "Should server reflect arbitrary Origin header values?", options: ["Yes, always", "No, use strict allowlist", "Only for POST", "Only for localhost"], correctIndex: 1, explanation: "Reflecting untrusted origins can expose data to attackers." },
+      { topic: "CORS", question: "What header allows browser to send credentials in CORS requests?", options: ["Access-Control-Allow-Credentials: true", "X-Frame-Options", "Strict-Transport-Security", "Referrer-Policy"], correctIndex: 0, explanation: "Credentials require both client and server opt-in." },
+      { topic: "CORS", question: "What is a simple CORS request?", options: ["Any request over HTTPS", "Request that avoids preflight under specific method/header rules", "Request with cookies only", "Request from same origin"], correctIndex: 1, explanation: "Certain methods/headers/content types are considered simple." },
+      { topic: "CORS", question: "Who enforces CORS?", options: ["Database engine", "Browser", "DNS server", "CDN only"], correctIndex: 1, explanation: "CORS is enforced by browsers, not by all HTTP clients." },
+      { topic: "CORS", question: "Does CORS protect server from non-browser clients?", options: ["Yes", "No", "Only with TLS", "Only on GET"], correctIndex: 1, explanation: "Tools like curl ignore browser CORS policy." },
+      { topic: "CORS", question: "Which CORS setup is safer?", options: ["Wildcard origin for everything", "Specific trusted origin allowlist", "Allow all headers without review", "Reflect all origins"], correctIndex: 1, explanation: "Tight allowlists reduce unnecessary exposure." },
+      { topic: "CORS", question: "What can go wrong with overly broad CORS?", options: ["No effect", "Sensitive data exposure to untrusted origins", "Faster image loading only", "Broken TLS"], correctIndex: 1, explanation: "Broad CORS can let hostile pages read protected data." },
+
+      { topic: "Headers", question: "What does HSTS enforce?", options: ["HTTP fallback", "HTTPS-only access for future requests", "Cookie deletion", "No cache"], correctIndex: 1, explanation: "HSTS instructs browsers to use HTTPS for the domain." },
+      { topic: "Headers", question: "What is X-Content-Type-Options: nosniff used for?", options: ["Prevent MIME type sniffing", "Enable CORS", "Encrypt cookies", "Disable CSP"], correctIndex: 0, explanation: "nosniff reduces content-type confusion attacks." },
+      { topic: "Headers", question: "What is X-Frame-Options for?", options: ["Block clickjacking via framing restrictions", "Set cache max-age", "Control redirects", "Enable compression"], correctIndex: 0, explanation: "It limits whether pages can be embedded in frames." },
+      { topic: "Headers", question: "What does Referrer-Policy manage?", options: ["Password hashing", "How much referrer info is sent", "Cookie signing", "DNS records"], correctIndex: 1, explanation: "It controls referer data leakage in outbound requests." },
+      { topic: "Headers", question: "What is a common CSP objective?", options: ["Disable TLS", "Restrict script sources", "Increase cookie size", "Change HTTP status"], correctIndex: 1, explanation: "CSP can reduce XSS impact by limiting executable sources." },
+      { topic: "Headers", question: "What does Permissions-Policy do?", options: ["Grant admin role", "Control browser feature availability", "Set DNS priority", "Rotate keys"], correctIndex: 1, explanation: "It allows/disallows access to browser APIs like camera/geolocation." },
+      { topic: "Headers", question: "Which header can reduce MIME confusion for downloads?", options: ["Content-Disposition attachment", "Access-Control-Allow-Origin", "ETag", "Last-Modified"], correctIndex: 0, explanation: "Attachment disposition can force download behavior." },
+      { topic: "Headers", question: "What is an anti-pattern with security headers?", options: ["Documented policy", "Copying unrelated policies without validation", "Testing in staging", "Monitoring violations"], correctIndex: 1, explanation: "Header policies should match app behavior and be tested." },
+      { topic: "Headers", question: "Why monitor CSP reports?", options: ["To tune and catch attempted policy violations", "To disable logs", "To bypass auth", "To rotate sessions"], correctIndex: 0, explanation: "Reports help identify blocked content and potential attacks." },
+      { topic: "Headers", question: "What is required for preload HSTS participation?", options: ["Short max-age", "Strict HTTPS setup and includeSubDomains", "No redirects", "Plain HTTP homepage"], correctIndex: 1, explanation: "Preload has strict requirements to ensure full HTTPS readiness." },
+
+      { topic: "API Security", question: "What is API rate limiting for?", options: ["Color themes", "Abuse and brute-force reduction", "Password reset", "DNS propagation"], correctIndex: 1, explanation: "Rate limits reduce automated abuse impact." },
+      { topic: "API Security", question: "What is excessive data exposure?", options: ["Returning only needed fields", "Returning more sensitive fields than necessary", "Using pagination", "Using JSON"], correctIndex: 1, explanation: "APIs should return minimal required data." },
+      { topic: "API Security", question: "Why version APIs?", options: ["Only for branding", "Manage change safely and predictably", "Disable auth", "Reduce logs"], correctIndex: 1, explanation: "Versioning prevents breaking clients and helps security rollout." },
+      { topic: "API Security", question: "What should protect sensitive API operations?", options: ["Frontend hidden button", "Strong authentication and authorization", "Large images", "Client-side validation only"], correctIndex: 1, explanation: "Server-side authn/authz controls are required." },
+      { topic: "API Security", question: "What is BOLA in APIs?", options: ["Broken object level authorization", "Binary object logging array", "Browser-origin login access", "Backend object layout attack"], correctIndex: 0, explanation: "BOLA means object access checks are missing or weak." },
+      { topic: "API Security", question: "How should API secrets be handled?", options: ["Hardcoded in frontend", "Stored securely in secret manager", "Shared in logs", "In query string"], correctIndex: 1, explanation: "Secrets should not be exposed to client-side code or logs." },
+      { topic: "API Security", question: "What is an idempotent HTTP method among these?", options: ["POST", "PATCH", "PUT", "CONNECT"], correctIndex: 2, explanation: "PUT is defined as idempotent when same request repeated." },
+      { topic: "API Security", question: "Why validate JSON schema on APIs?", options: ["For color consistency", "To enforce structure and reject malformed input", "To disable TLS", "To increase token size"], correctIndex: 1, explanation: "Schema validation reduces unexpected parser and logic behaviors." },
+      { topic: "API Security", question: "What is secure API error handling?", options: ["Expose stack traces", "Return minimal safe errors and log details internally", "Return SQL queries", "Return environment variables"], correctIndex: 1, explanation: "Users get safe messages; internal logs keep diagnostic detail." },
+      { topic: "API Security", question: "What is one risk of long-lived API tokens?", options: ["Lower memory usage", "Larger blast radius if leaked", "Faster DNS", "Automatic CSRF protection"], correctIndex: 1, explanation: "Long token lifetime increases impact of compromise." }
     ];
 
-    const shuffleButton = document.getElementById("shuffle-btn");
-    const startButton = document.getElementById("start-btn");
-    const startScreen = document.getElementById("start-screen");
-    const quizArea = document.getElementById("quiz-area");
+    const app = document.getElementById("app");
+    const statQuestion = document.getElementById("stat-question");
+    const statScore = document.getElementById("stat-score");
+    const statProgress = document.getElementById("stat-progress");
+    const labelLeft = document.getElementById("label-left");
+    const labelRight = document.getElementById("label-right");
     const progressFill = document.getElementById("progress-fill");
-    const questionCounterLabel = document.getElementById("question-counter-label");
-    const percentLabel = document.getElementById("percent-label");
-    const statTotal = document.getElementById("stat-total");
 
-    let questions = baseQuestions.slice();
-    let currentIndex = 0;
-    let score = 0;
-    let hasStarted = false;
+    const state = {
+      current: 0,
+      score: 0,
+      started: false
+    };
 
-    statTotal.textContent = String(questions.length);
+    function updateStatus() {
+      const total = questions.length;
+      const currentShown = state.started ? Math.min(state.current + 1, total) : 0;
+      const progress = state.started ? Math.round((state.current / total) * 100) : 0;
 
-    function shuffleArray(items) {
-      const copy = items.slice();
-      for (let index = copy.length - 1; index > 0; index -= 1) {
-        const swapIndex = Math.floor(Math.random() * (index + 1));
-        [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+      statQuestion.textContent = `${currentShown} / ${total}`;
+      statScore.textContent = String(state.score);
+      statProgress.textContent = `${progress}%`;
+      labelRight.textContent = `${progress}%`;
+      progressFill.style.width = `${progress}%`;
+
+      if (!state.started) {
+        labelLeft.textContent = "Ready to start";
+      } else if (state.current >= total) {
+        labelLeft.textContent = "Quiz complete";
+      } else {
+        labelLeft.textContent = `Question ${currentShown} of ${total}`;
       }
-      return copy;
     }
 
-    function resetQuiz() {
-      currentIndex = 0;
-      score = 0;
-      quizArea.innerHTML = "";
-      progressFill.style.width = "0%";
-      questionCounterLabel.textContent = "آماده شروع";
-      percentLabel.textContent = "۰٪ پیشرفت";
-      quizArea.classList.add("hidden");
-      startScreen.classList.remove("hidden");
-      hasStarted = false;
+    function renderStart() {
+      state.started = false;
+      state.current = 0;
+      state.score = 0;
+      updateStatus();
+
+      app.innerHTML = `
+        <div class="question-card">
+          <p class="topic">Start</p>
+          <p class="question-text">Press start to begin the 100-question quiz.</p>
+          <div class="control-row">
+            <div class="score">Time-free mode with immediate feedback</div>
+            <button class="primary" id="start-btn" type="button">Start Quiz</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("start-btn").addEventListener("click", () => {
+        state.started = true;
+        renderQuestion();
+      });
     }
 
     function renderQuestion() {
-      if (currentIndex >= questions.length) {
+      if (state.current >= questions.length) {
         renderResult();
         return;
       }
 
-      const total = questions.length;
-      const question = questions[currentIndex];
-      const currentNumber = currentIndex + 1;
-      const progress = Math.round((currentIndex / total) * 100);
-      const optionLetters = ["الف", "ب", "ج", "د"];
+      updateStatus();
+      const item = questions[state.current];
+      const letters = ["A", "B", "C", "D"];
 
-      questionCounterLabel.textContent = `سؤال ${currentNumber} از ${total}`;
-      percentLabel.textContent = `${progress}٪ پیشرفت`;
-      progressFill.style.width = `${progress}%`;
+      const optionsHtml = item.options
+        .map((opt, idx) => `
+          <button class="option" type="button" data-index="${idx}">
+            <span class="index">${letters[idx]}</span>
+            <span class="label">${opt}</span>
+          </button>
+        `)
+        .join("");
 
-      const optionsHtml = question.options.map((option, index) => `
-        <button class="option-btn" type="button" data-index="${index}">
-          <span class="option-index">${optionLetters[index] ?? ""}</span>
-          <span class="option-label">${option}</span>
-          <span class="option-state" aria-hidden="true"></span>
-        </button>
-      `).join("");
-
-      quizArea.innerHTML = `
-        <section class="question-card" aria-live="polite">
-          <div class="quiz-topbar">
-            <span class="badge">${question.topic}</span>
-            <span class="question-counter">${currentNumber} / ${total}</span>
-          </div>
-          <p class="question-text">${question.question}</p>
+      app.innerHTML = `
+        <div class="question-card">
+          <p class="topic">${item.topic}</p>
+          <p class="question-text">${item.question}</p>
           <div class="options">${optionsHtml}</div>
-          <div class="feedback" id="feedback-box"></div>
-        </section>
-        <div class="controls">
-          <div class="score-pill">امتیاز فعلی: <strong id="score-value">${score}</strong> از ${total}</div>
-          <button class="primary-btn" id="next-btn" type="button" disabled>سؤال بعدی</button>
+          <div class="feedback" id="feedback"></div>
+        </div>
+        <div class="control-row">
+          <div class="score">Score: <strong id="score-now">${state.score}</strong> / ${questions.length}</div>
+          <button class="primary" id="next-btn" type="button" disabled>${state.current === questions.length - 1 ? "Show Result" : "Next Question"}</button>
         </div>
       `;
 
-      const optionButtons = quizArea.querySelectorAll(".option-btn");
-      const feedbackBox = document.getElementById("feedback-box");
-      const nextButton = document.getElementById("next-btn");
-      const scoreValue = document.getElementById("score-value");
+      const optionButtons = app.querySelectorAll(".option");
+      const feedback = document.getElementById("feedback");
+      const nextBtn = document.getElementById("next-btn");
+      const scoreNow = document.getElementById("score-now");
       let answered = false;
 
       optionButtons.forEach((button) => {
@@ -656,109 +565,67 @@
           if (answered) return;
           answered = true;
 
-          const selectedIndex = Number(button.dataset.index);
-          const correctIndex = question.correctIndex;
+          const selected = Number(button.dataset.index);
+          const correct = item.correctIndex;
 
-          optionButtons.forEach((optionButton, index) => {
-            optionButton.classList.add("disabled");
-            if (index === correctIndex) optionButton.classList.add("correct");
+          optionButtons.forEach((b, idx) => {
+            b.disabled = true;
+            if (idx === correct) b.classList.add("correct");
           });
 
-          if (selectedIndex === correctIndex) {
-            score += 1;
-            scoreValue.textContent = String(score);
-            feedbackBox.innerHTML = `<strong>پاسخ درست بود.</strong> ${question.explanation}`;
+          if (selected === correct) {
+            state.score += 1;
+            scoreNow.textContent = String(state.score);
+            feedback.innerHTML = `<strong>Correct.</strong> ${item.explanation}`;
           } else {
             button.classList.add("incorrect");
-            feedbackBox.innerHTML = `<strong>پاسخ درست نیست.</strong> ${question.explanation}`;
+            feedback.innerHTML = `<strong>Incorrect.</strong> Correct answer: ${item.options[correct]}. ${item.explanation}`;
           }
 
-          feedbackBox.style.display = "block";
-          nextButton.disabled = false;
+          feedback.style.display = "block";
+          nextBtn.disabled = false;
+          updateStatus();
         });
       });
 
-      nextButton.addEventListener("click", () => {
-        currentIndex += 1;
+      nextBtn.addEventListener("click", () => {
+        state.current += 1;
         renderQuestion();
       });
     }
 
     function renderResult() {
       const total = questions.length;
-      const percent = Math.round((score / total) * 100);
+      const percent = Math.round((state.score / total) * 100);
 
       progressFill.style.width = "100%";
-      questionCounterLabel.textContent = "آزمون کامل شد";
-      percentLabel.textContent = `${percent}٪ نتیجه`;
+      statQuestion.textContent = `${total} / ${total}`;
+      statProgress.textContent = "100%";
+      labelLeft.textContent = "Quiz complete";
+      labelRight.textContent = `${percent}%`;
 
-      let resultTitle = "نتیجه آزمون";
-      let resultText = "";
+      let summary = "Good effort. Review explanations and retake for stronger consistency.";
+      if (percent >= 90) summary = "Excellent work. Your fundamentals are very strong.";
+      else if (percent >= 75) summary = "Great result. You have a solid standard-level foundation.";
+      else if (percent >= 60) summary = "Decent result. A focused review will improve your score quickly.";
 
-      if (percent >= 85) {
-        resultTitle = "عالی";
-        resultText = "سطح شما برای مفاهیم پایه و استاندارد امنیت وب بسیار خوب است.";
-      } else if (percent >= 60) {
-        resultTitle = "خوب";
-        resultText = "در سطح قابل‌قبولی هستید. با مرور دوباره توضیحات، نتیجه بهتری می‌گیرید.";
-      } else {
-        resultTitle = "نیاز به تمرین بیشتر";
-        resultText = "پیشنهاد می‌شود آزمون را دوباره انجام دهید و روی مفاهیم پایه تمرکز کنید.";
-      }
-
-      const reviewHtml = questions.map((item, index) => `
-        <div class="review-item">
-          <strong>سؤال ${index + 1}:</strong> ${item.topic}<br />
-          پاسخ درست: ${item.options[item.correctIndex]}
+      app.innerHTML = `
+        <div class="question-card result">
+          <h2>Final Result</h2>
+          <div class="percent">${percent}%</div>
+          <p>You answered ${state.score} out of ${total} questions correctly.</p>
+          <p>${summary}</p>
         </div>
-      `).join("");
-
-      quizArea.innerHTML = `
-        <section class="question-card">
-          <div class="result-grid">
-            <div class="result-score">${percent}٪</div>
-            <h2 class="result-title">${resultTitle}</h2>
-            <p class="result-text">${resultText}</p>
-            <div class="score-pill" style="justify-content: center;">امتیاز نهایی: <strong>${score}</strong> از ${total}</div>
-            <div class="review-list">${reviewHtml}</div>
-          </div>
-        </section>
-        <div class="controls">
-          <button class="primary-btn" id="restart-btn" type="button">شروع دوباره</button>
-          <button class="ghost-btn" id="back-start-btn" type="button">بازگشت به صفحه شروع</button>
+        <div class="control-row">
+          <div class="score">Standard-level web security quiz completed</div>
+          <button class="secondary" id="restart-btn" type="button">Restart Quiz</button>
         </div>
       `;
 
-      document.getElementById("restart-btn").addEventListener("click", () => {
-        currentIndex = 0;
-        score = 0;
-        progressFill.style.width = "0%";
-        renderQuestion();
-      });
-
-      document.getElementById("back-start-btn").addEventListener("click", () => {
-        resetQuiz();
-      });
+      document.getElementById("restart-btn").addEventListener("click", renderStart);
     }
 
-    function startQuiz() {
-      if (!hasStarted) {
-        hasStarted = true;
-        startScreen.classList.add("hidden");
-        quizArea.classList.remove("hidden");
-        renderQuestion();
-      }
-    }
-
-    startButton.addEventListener("click", startQuiz);
-
-    shuffleButton.addEventListener("click", () => {
-      questions = shuffleArray(baseQuestions);
-      statTotal.textContent = String(questions.length);
-      resetQuiz();
-    });
-
-    resetQuiz();
+    renderStart();
   </script>
 </body>
 </html>
