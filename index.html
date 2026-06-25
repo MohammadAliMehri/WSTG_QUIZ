@@ -2,1373 +2,608 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>کوییز امنیت وب‌اپلیکیشن</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>کوییز استاندارد امنیت وب</title>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    :root {
+      color-scheme: light;
+      --bg: #07111f;
+      --panel: rgba(11, 21, 36, 0.84);
+      --panel-border: rgba(148, 163, 184, 0.16);
+      --text: #e5eefc;
+      --muted: #9fb0c7;
+      --accent: #4cc9f0;
+      --accent-2: #f9c74f;
+      --good: #2dd4bf;
+      --bad: #fb7185;
+      --shadow: 0 24px 80px rgba(2, 8, 23, 0.45);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
     }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       min-height: 100vh;
-      display: flex;
+      font-family: "Tahoma", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(76, 201, 240, 0.18), transparent 28%),
+        radial-gradient(circle at left center, rgba(249, 199, 79, 0.13), transparent 24%),
+        linear-gradient(160deg, #06101d 0%, #0b1830 52%, #08111d 100%);
+      color: var(--text);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent 92%);
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 24px auto;
+      padding: 24px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 18px;
+      margin-bottom: 18px;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .stats-card,
+    .quiz-card {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-card {
+      padding: 28px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -110px auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(76, 201, 240, 0.2), transparent 68%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at top left, #ffe4f5 0, #ffffff 40%, #e0e7ff 100%);
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: #b9ecff;
+      background: rgba(76, 201, 240, 0.12);
+      border: 1px solid rgba(76, 201, 240, 0.22);
+      font-size: 0.84rem;
+      margin-bottom: 14px;
     }
 
-    .app-container {
-      width: 100%;
-      max-width: 960px;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 24px;
-      padding: 24px 20px 28px;
-      box-shadow:
-        0 18px 40px rgba(15, 23, 42, 0.18),
-        0 0 0 1px rgba(148, 163, 184, 0.15);
-      backdrop-filter: blur(12px);
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1.25;
     }
 
-    .app-header {
+    .hero-copy {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 62ch;
+    }
+
+    .hero-meta {
       display: flex;
       flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      color: #d6e6ff;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stats-card {
+      padding: 22px;
+      display: grid;
+      gap: 14px;
+      align-content: center;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .stat span:first-child {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .stat strong { font-size: 1rem; }
+
+    .progress-shell { margin: 18px 0 20px; }
+
+    .progress-row {
+      display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .title-block h1 {
-      margin: 0;
-      font-size: 1.5rem;
-      color: #0f172a;
-    }
-
-    .title-block p {
-      margin: 4px 0 0;
-      font-size: 0.9rem;
-      color: #64748b;
-    }
-
-    .pill {
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: linear-gradient(90deg, #f9a8d4, #818cf8);
-      color: white;
-      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7);
-    }
-
-    .pill span.icon {
-      display: inline-flex;
-      width: 20px;
-      height: 20px;
-      border-radius: 999px;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.25);
+      margin-bottom: 10px;
+      color: var(--muted);
       font-size: 0.9rem;
     }
 
     .progress-bar {
       width: 100%;
-      height: 10px;
+      height: 12px;
       border-radius: 999px;
-      background: #e5e7eb;
+      background: rgba(255, 255, 255, 0.08);
       overflow: hidden;
-      margin-bottom: 18px;
-      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .progress-fill {
-      height: 100%;
       width: 0%;
+      height: 100%;
       border-radius: inherit;
-      background: linear-gradient(90deg, #f472b6, #818cf8);
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
       transition: width 0.35s ease;
     }
 
-    .progress-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      color: #6b7280;
-      margin-bottom: 12px;
+    .quiz-card {
+      padding: 24px;
+      overflow: hidden;
     }
 
-    .question-card {
-      border-radius: 20px;
-      padding: 18px 16px 16px;
-      background: linear-gradient(135deg, rgba(254, 242, 242, 0.9), rgba(238, 242, 255, 0.9));
-      border: 1px solid rgba(248, 113, 166, 0.2);
-    }
-
-    .question-meta {
+    .quiz-topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.8rem;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      color: #d7e5ff;
+      background: rgba(76, 201, 240, 0.1);
+      border: 1px solid rgba(76, 201, 240, 0.18);
+    }
+
+    .question-counter {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .question-card {
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(12, 23, 40, 0.96), rgba(8, 17, 30, 0.96));
+      border: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    .question-topic {
+      color: #9dd9ff;
+      font-size: 0.84rem;
       margin-bottom: 8px;
-      color: #6b7280;
+      letter-spacing: 0.02em;
     }
 
     .question-text {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #111827;
-      margin-bottom: 14px;
+      margin: 0;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      line-height: 1.85;
+      color: #f5f8ff;
+      font-weight: 700;
     }
 
     .options {
       display: grid;
-      gap: 10px;
-      margin-bottom: 12px;
+      gap: 12px;
+      margin-top: 18px;
     }
 
     .option-btn {
       width: 100%;
-      text-align: right;
-      border-radius: 999px;
-      padding: 10px 14px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 18px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
       cursor: pointer;
-      font-size: 0.9rem;
-      color: #111827;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      transition:
-        background 0.18s ease,
-        box-shadow 0.18s ease,
-        transform 0.05s ease,
-        border-color 0.18s ease;
+      gap: 12px;
+      align-items: flex-start;
+      text-align: right;
+      transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
     }
 
-    .option-btn:hover {
-      box-shadow: 0 6px 16px rgba(148, 163, 184, 0.35);
+    .option-btn:hover:not(.disabled) {
       transform: translateY(-1px);
-      border-color: rgba(236, 72, 153, 0.55);
+      border-color: rgba(76, 201, 240, 0.5);
+      box-shadow: 0 10px 24px rgba(2, 8, 23, 0.24);
+      background: rgba(255, 255, 255, 0.065);
     }
 
-    .option-prefix {
+    .option-btn:focus-visible,
+    .primary-btn:focus-visible {
+      outline: 3px solid rgba(76, 201, 240, 0.4);
+      outline-offset: 3px;
+    }
+
+    .option-index {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
       font-weight: 700;
-      color: #6b21a8;
-      min-width: 20px;
-      text-align: center;
+      background: rgba(255, 255, 255, 0.08);
+      color: #e5eefc;
     }
 
-    .option-text {
+    .option-label {
       flex: 1;
+      line-height: 1.75;
+      font-size: 0.98rem;
+      color: #eef4ff;
     }
 
-    .option-state-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: #e5e7eb;
+    .option-state {
+      flex: 0 0 auto;
+      width: 12px;
+      height: 12px;
+      margin-top: 9px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.18);
     }
 
     .option-btn.correct {
-      background: linear-gradient(90deg, #bbf7d0, #a5b4fc);
-      border-color: #16a34a;
-      color: #065f46;
+      border-color: rgba(45, 212, 191, 0.7);
+      background: rgba(45, 212, 191, 0.12);
     }
 
     .option-btn.incorrect {
-      background: linear-gradient(90deg, #fee2e2, #fecaca);
-      border-color: #dc2626;
-      color: #7f1d1d;
+      border-color: rgba(251, 113, 133, 0.75);
+      background: rgba(251, 113, 133, 0.12);
     }
+
+    .option-btn.correct .option-state { background: var(--good); }
+    .option-btn.incorrect .option-state { background: var(--bad); }
 
     .option-btn.disabled {
-      opacity: 0.85;
-      cursor: default;
       pointer-events: none;
-      box-shadow: none;
-      transform: none;
+      opacity: 0.96;
     }
 
-    .option-btn.correct .option-state-dot {
-      background: #16a34a;
-    }
-
-    .option-btn.incorrect .option-state-dot {
-      background: #dc2626;
-    }
-
-    .explanation-wrapper {
-      margin-top: 8px;
+    .feedback {
       display: none;
-    }
-
-    .explanation-bubble {
-      position: relative;
-      display: inline-block;
-      max-width: 100%;
-      background: #fdf2ff;
+      margin-top: 16px;
+      padding: 16px;
       border-radius: 18px;
-      padding: 12px 14px 10px;
-      border: 1px solid rgba(168, 85, 247, 0.55);
-      box-shadow: 0 8px 16px rgba(129, 140, 248, 0.25);
-      font-size: 0.85rem;
-      color: #4b5563;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #d4e0f2;
+      line-height: 1.9;
     }
 
-    .explanation-bubble::before {
-      content: "";
-      position: absolute;
-      bottom: -10px;
-      right: 26px;
-      border-width: 10px 10px 0 10px;
-      border-style: solid;
-      border-color: rgba(168, 85, 247, 0.55) transparent transparent transparent;
-    }
-
-    .explanation-bubble::after {
-      content: "";
-      position: absolute;
-      bottom: -8px;
-      right: 27px;
-      border-width: 9px 9px 0 9px;
-      border-style: solid;
-      border-color: #fdf2ff transparent transparent transparent;
-    }
-
-    .explanation-title {
-      font-weight: 700;
-      color: #7c3aed;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .explanation-title span.icon {
-      font-size: 1rem;
-    }
+    .feedback strong { color: #fff2a8; }
 
     .controls {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 14px;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
     }
 
     .score-pill {
-      font-size: 0.85rem;
-      padding: 6px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(59, 130, 246, 0.08);
-      color: #1d4ed8;
+      color: #d6e6ff;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .primary-btn {
-      padding: 9px 18px;
-      border-radius: 999px;
       border: none;
-      font-size: 0.9rem;
-      font-weight: 600;
+      border-radius: 999px;
+      padding: 12px 18px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #06101d;
+      font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: linear-gradient(90deg, #ec4899, #6366f1);
-      color: white;
-      box-shadow: 0 10px 22px rgba(236, 72, 153, 0.45);
-      transition:
-        transform 0.1s ease,
-        box-shadow 0.1s ease,
-        filter 0.15s ease;
+      gap: 8px;
+      box-shadow: 0 16px 30px rgba(76, 201, 240, 0.2);
+      transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease;
+    }
+
+    .primary-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 18px 34px rgba(249, 199, 79, 0.24);
     }
 
     .primary-btn:disabled {
-      opacity: 0.5;
-      cursor: default;
+      cursor: not-allowed;
+      opacity: 0.52;
       box-shadow: none;
-      transform: none;
     }
 
-    .primary-btn:not(:disabled):hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 26px rgba(129, 140, 248, 0.55);
-      filter: brightness(1.05);
-    }
-
-    .primary-btn:not(:disabled):active {
-      transform: translateY(0);
-      box-shadow: 0 6px 14px rgba(129, 140, 248, 0.55);
-    }
-
-    .result-card {
+    .result-grid {
+      display: grid;
+      gap: 16px;
       text-align: center;
+      padding: 14px 0 4px;
     }
 
     .result-score {
-      font-size: 2rem;
-      font-weight: 800;
-      background: linear-gradient(90deg, #ec4899, #6366f1);
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(90deg, #ffffff, #9dd9ff 45%, #fff2a8 100%);
       -webkit-background-clip: text;
+      background-clip: text;
       color: transparent;
-      margin-bottom: 8px;
     }
 
-    .result-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
+    .result-title {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .result-text {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .review-list {
+      display: grid;
+      gap: 10px;
+      text-align: right;
+      margin-top: 6px;
+    }
+
+    .review-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: #d7e5ff;
+      line-height: 1.7;
+      font-size: 0.94rem;
+    }
+
+    .review-item strong { color: #fff2a8; }
+
+    .muted-small {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .start-screen {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .start-panel {
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(12, 23, 40, 0.94), rgba(8, 17, 30, 0.94));
+      border: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    .start-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .ghost-btn {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
       border-radius: 999px;
-      font-size: 0.85rem;
-      background: rgba(22, 163, 74, 0.07);
-      color: #15803d;
-      margin-bottom: 10px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
-    .result-msg {
-      font-size: 0.9rem;
-      color: #4b5563;
-      margin-bottom: 14px;
+    .hidden { display: none !important; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 640px) {
-      .app-container {
-        border-radius: 0;
-        height: 100vh;
-        max-width: 100%;
+      .shell {
+        width: min(100%, calc(100% - 16px));
+        margin: 8px auto;
+        padding: 8px;
+      }
+
+      .hero-card,
+      .quiz-card,
+      .stats-card,
+      .start-panel {
+        border-radius: 20px;
+        padding: 18px;
+      }
+
+      .question-card { padding: 18px; }
+
+      .controls { align-items: stretch; }
+
+      .primary-btn,
+      .ghost-btn {
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
 </head>
 <body>
-  <div class="app-container">
-    <header class="app-header">
-      <div class="title-block">
-        <h1>کوییز امنیت وب‌اپلیکیشن</h1>
-        <p>سؤالات چهارگزینه‌ای برای تمرین مباحث OWASP و حفره‌های متداول امنیتی.</p>
-      </div>
-      <div class="pill">
-        <span class="icon">🛡️</span>
-      </div>
-    </header>
+  <main class="shell">
+    <section class="hero">
+      <article class="hero-card">
+        <div class="eyebrow">کوییز استاندارد سطح متوسط</div>
+        <h1>کوییز امنیت وب با ظاهر حرفه‌ای و تجربه کاربری ساده</h1>
+        <p class="hero-copy">
+          این نسخه برای ارائه روی GitHub بازنویسی شده است: سؤال‌ها کوتاه‌تر، سطح دشواری استانداردتر و چیدمان صفحه مناسب استفاده روی دسکتاپ و موبایل است.
+        </p>
+        <div class="hero-meta">
+          <span class="tag">۴ گزینه برای هر سؤال</span>
+          <span class="tag">نمایش توضیح پاسخ</span>
+          <span class="tag">مناسب GitHub Pages</span>
+        </div>
+      </article>
 
-    <div class="progress-labels">
-      <span id="question-counter-label">سؤال ۱ از N</span>
-      <span id="percent-label">۰٪ پیشرفت</span>
-    </div>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progress-fill"></div>
-    </div>
+      <aside class="stats-card">
+        <div class="stat"><span>تعداد سؤال</span><strong id="stat-total">12</strong></div>
+        <div class="stat"><span>نوع آزمون</span><strong>چندگزینه‌ای</strong></div>
+        <div class="stat"><span>سطح</span><strong>Standard</strong></div>
+      </aside>
+    </section>
 
-    <main id="quiz-area">
-      <!-- اینجا با جاوااسکریپت پر می‌شود -->
-    </main>
-  </div>
+    <section class="quiz-card">
+      <div class="progress-shell">
+        <div class="progress-row">
+          <span id="question-counter-label">آماده شروع</span>
+          <span id="percent-label">۰٪ پیشرفت</span>
+        </div>
+        <div class="progress-bar" aria-hidden="true">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <section id="start-screen" class="start-screen">
+        <div class="start-panel">
+          <div class="badge">شروع سریع</div>
+          <p class="muted-small" style="margin-top: 12px;">
+            روی دکمه زیر بزنید تا آزمون آغاز شود. هر سؤال فقط یک پاسخ درست دارد و بعد از انتخاب، توضیح کوتاه نمایش داده می‌شود.
+          </p>
+          <div class="start-actions">
+            <button class="primary-btn" id="start-btn" type="button">شروع آزمون</button>
+            <button class="ghost-btn" id="shuffle-btn" type="button">ترتیب تصادفی سؤال‌ها</button>
+          </div>
+        </div>
+      </section>
+
+      <div id="quiz-area" class="hidden"></div>
+    </section>
+  </main>
 
   <script>
-    // --------- سؤالات بر اساس WSTG 4.2 ----------
-    const questions = [
-      // =========================
-      // 4.1 Information Gathering
-      // =========================
-      {
-        topic: "Information Gathering - WSTG-INFO-01",
-        question: "هدف اصلی جست‌وجو در موتورهای جست‌وجو برای نشت اطلاعات (Search Engine Recon) چیست؟",
-        options: [
-          "پیدا کردن رمز عبور کاربران از روی فرم لاگین",
-          "پیدا کردن صفحات، فایل‌ها و اطلاعات حساسی که تصادفی ایندکس شده‌اند",
-          "تست سرعت پاسخ‌گوی سرور",
-          "بررسی گواهی TLS روی دامنه"
-        ],
-        correctIndex: 1,
-        explanation:
-          "در این تست دنبال صفحاتی مثل /backup، اسناد PDF، فایل‌های کانفیگ یا داکیومنت‌های لو رفته هستیم که توسط موتورهای جست‌وجو ایندکس شده و ممکن است اطلاعات حساسی افشا کنند."
-      },
-      {
-        topic: "Information Gathering - WSTG-INFO-02",
-        question: "در تست Fingerprint Web Server معمولاً چه چیزی بررسی می‌شود؟",
-        options: [
-          "نسخه دقیق وب‌سرور و ماژول‌های فعال روی آن",
-          "فقط IP آدرس سرور",
-          "لیست کامل کاربران سیستم‌عامل",
-          "ظرفیت RAM سرور"
-        ],
-        correctIndex: 0,
-        explanation:
-          "با Fingerprinting تلاش می‌شود نوع و نسخه وب‌سرور (مثلاً nginx 1.x, Apache 2.x, IIS) و ماژول‌هایش شناسایی شود تا ریسک‌های وابسته به نسخه‌های آسیب‌پذیر مشخص شود."
-      },
-      {
-        topic: "Information Gathering - WSTG-INFO-03",
-        question: "بررسی متافایل‌های وب‌سرور (robots.txt، sitemap و…) معمولاً با چه هدفی انجام می‌شود؟",
-        options: [
-          "افزایش سئو",
-          "پیدا کردن مسیرها یا فایل‌هایی که توسعه‌دهنده نمی‌خواسته عمومی باشند",
-          "تغییر رفتار مرورگر کاربر",
-          "بهینه‌سازی کش سمت کلاینت"
-        ],
-        correctIndex: 1,
-        explanation:
-          "در متافایل‌ها گاهی مسیرهای مدیریتی، ناحیه تست یا APIهای داخلی لیست می‌شود که می‌توانند سطح حمله را بزرگ‌تر کنند."
-      },
-      {
-        topic: "Information Gathering - WSTG-INFO-04",
-        question: "Enumerate Applications on Webserver یعنی چه؟",
-        options: [
-          "پیدا کردن تمام وب‌اپلیکیشن‌ها و ورچوال‌هاست‌های میزبانی‌شده روی همان سرور",
-          "پیدا کردن همه کاربران ثبت‌نام‌کرده",
-          "لیست گرفتن از همه دیتابیس‌ها",
-          "چک کردن همه پورت‌های باز روی فایروال"
-        ],
-        correctIndex: 0,
-        explanation:
-          "روی یک وب‌سرور ممکن است چند اپلیکیشن مختلف میزبانی شود. شناسایی همه آنها کمک می‌کند اپلیکیشن‌های فراموش‌شده یا کم‌حفاظت پیدا شوند."
-      },
-      {
-        topic: "Information Gathering - WSTG-INFO-05",
-        question: "چرا بررسی کامنت‌ها و متادیتای صفحات وب مهم است؟",
-        options: [
-          "فقط برای بهبود استایل CSS",
-          "چون ممکن است نام کاربری، مسیر فایل‌ها یا اطلاعات داخلی در کامنت‌ها باقی مانده باشد",
-          "برای فعال‌کردن کوکی‌ها",
-          "برای فهمیدن نسخه مرورگر کاربر"
-        ],
-        correctIndex: 1,
-        explanation:
-          "توسعه‌دهنده‌ها گاهی TODO، مسیرها، نمونه پسورد یا توضیحات داخلی را در HTML/JS کامنت می‌کنند که می‌تواند برای مهاجم بسیار مفید باشد."
-      },
-      {
-        topic: "Information Gathering - WSTG-INFO-06",
-        question: "Identify Application Entry Points دقیقاً به چه معنی است؟",
-        options: [
-          "لیست تمام فیلدها، پارامترها و URLهایی که ورودی از کاربر می‌گیرند",
-          "فقط صفحه لاگین",
-          "همه درخواست‌های استاتیک مثل CSS",
-          "تنها آدرس اصلی وب‌سایت"
-        ],
-        correctIndex: 0,
-        explanation:
-          "همه پارامترهای GET/POST، هدرها، بدنه JSON و… باید شناسایی شوند چون هرکدام می‌توانند سطح حمله‌ای برای تزریق یا منطق مخرب ایجاد کنند."
-      },
-      {
-        topic: "Information Gathering - WSTG-INFO-07",
-        question: "هدف Map Execution Paths Through Application چیست؟",
-        options: [
-          "یافتن سریع‌ترین مسیر شبکه",
-          "فهمیدن زنجیره صفحات/عملیات از دید کاربر و سناریوهای اصلی کاربری",
-          "پیداکردن آدرس IP واقعی",
-          "بهینه‌سازی performance"
-        ],
-        correctIndex: 1,
-        explanation:
-          "با نقشه‌کردن مسیرهای اجرا می‌توان دید کجاها تصمیم‌های مهم امنیتی گرفته می‌شود (مثل چک دسترسی) و چه مسیرهای غیرمعمولی وجود دارند."
-      },
-      {
-        topic: "Information Gathering - WSTG-INFO-08/09/10",
-        question: "Fingerprint Web Application & Framework و Map Application Architecture معمولاً چه کمکی می‌کنند؟",
-        options: [
-          "فقط ظاهر گرافیکی سایت را مشخص می‌کنند",
-          "فریم‌ورک، زبان، اجزای اصلی و نحوه ارتباط سرویس‌ها را مشخص می‌کنند",
-          "صرفاً حجم دیتابیس را نشان می‌دهند",
-          "فقط الگوریتم‌های رمزنگاری را مشخص می‌کنند"
-        ],
-        correctIndex: 1,
-        explanation:
-          "شناخت فریم‌ورک (مثلاً Laravel، Spring، Django) و اجزای معماری (API Gateway، سرویس‌های بک‌اند، queueها) برای درک کنترل‌های امنیتی و نقاط ضعف احتمالی ضروری است."
-      },
-
-      // ==========================================
-      // 4.2 Configuration & Deployment Management
-      // ==========================================
-      {
-        topic: "Config & Deployment - Network Config",
-        question: "در تست تنظیمات شبکه/زیرساخت (Network/Infrastructure Configuration) چه چیزی بیشتر مورد توجه است؟",
-        options: [
-          "باز بودن پورت‌ها و سرویس‌های غیرضروری یا ناامن",
-          "فقط استفاده از CDN",
-          "رنگ تم سایت",
-          "نوع فونت استفاده شده"
-        ],
-        correctIndex: 0,
-        explanation:
-          "پورت‌ها و سرویس‌های غیرضروری سطح حمله را بالا می‌برند و باید بسته یا محدود شوند."
-      },
-      {
-        topic: "Config & Deployment - Platform Config",
-        question: "تست تنظیمات پلتفرم اپلیکیشن (Application Platform Configuration) معمولاً شامل چیست؟",
-        options: [
-          "تنظیم تم گرافیکی اپلیکیشن",
-          "چک کردن تنظیمات پیش‌فرض، ماژول‌های غیرضروری و حالت Debug",
-          "تنظیم متغیرهای CSS",
-          "انتخاب فونت فانتزی برای UI"
-        ],
-        correctIndex: 1,
-        explanation:
-          "فعال بودن Debug، ماژول‌ها و صفحات پیش‌فرض یا نمونه، و تنظیمات ناامن فریم‌ورک می‌تواند اطلاعات زیادی به مهاجم بدهد یا حمله را آسان کند."
-      },
-      {
-        topic: "Config & Deployment - File Extensions",
-        question: "چرا «بررسی هندلینگ پسوند فایل‌ها برای اطلاعات حساس» مهم است؟",
-        options: [
-          "برای زیباتر شدن URL",
-          "چون ممکن است فایل‌های .bak یا .old حاوی اطلاعات حساس باشند و به صورت متن عادی دانلود شوند",
-          "فقط برای تست سرعت دانلود",
-          "برای بهبود SEO"
-        ],
-        correctIndex: 1,
-        explanation:
-          "اگر سرور فایل‌های پشتیبان یا کانفیگ را به جای اجرای آنها، مستقیم به کاربر بدهد، ممکن است کد، رمزعبور یا کلیدها افشا شوند."
-      },
-      {
-        topic: "Config & Deployment - Old/Backup Files",
-        question: "در تست «Old, Backup and Unreferenced Files» دنبال چه چیزی هستیم؟",
-        options: [
-          "فقط فایل‌های CSS قدیمی",
-          "فایل‌های قدیمی، بک‌آپ یا صفحات تست که هنوز روی سرور هستند و لینک مستقیم دارند",
-          "فقط فایل‌های تصویری",
-          "فقط فونت‌های وب"
-        ],
-        correctIndex: 1,
-        explanation:
-          "فایل‌های قدیمی ممکن است باگ‌های رفع‌شده، قابلیت‌های غیرفعال یا اطلاعات حساس داشته باشند که نباید در دسترس باشند."
-      },
-      {
-        topic: "Config & Deployment - Admin Interfaces",
-        question: "Enumerate Admin Interfaces یعنی چه؟",
-        options: [
-          "پیدا کردن همه صفحات مدیریت و پنل‌های Admin (وب‌سرور، دیتابیس، اپلیکیشن)",
-          "پیدا کردن همه کاربران عادی",
-          "فهرست‌کردن همه تصاویر استفاده‌شده در سایت",
-          "بررسی همه فونت‌ها"
-        ],
-        correctIndex: 0,
-        explanation:
-          "پنل‌های مدیریتی اگر درست محافظت نشده باشند، نقطه ورود بسیار خطرناکی برای مهاجم هستند."
-      },
-      {
-        topic: "Config & Deployment - HTTP Methods",
-        question: "در تست HTTP Methods چه چیزی باید بررسی شود؟",
-        options: [
-          "اینکه فقط متدهای لازم (مثل GET, POST) فعال باشند و متدهای خطرناک مثل PUT, DELETE بدون نیاز باز نباشند",
-          "اینکه همه متدها فعال باشند تا توسعه راحت‌تر شود",
-          "اینکه HEAD همیشه غیرفعال باشد",
-          "اینکه OPTIONS خطا بدهد"
-        ],
-        correctIndex: 0,
-        explanation:
-          "متدهایی مانند PUT, DELETE, TRACE, CONNECT اگر بدون هدف فعال باشند می‌توانند به تغییر منابع یا افشای اطلاعات کمک کنند."
-      },
-      {
-        topic: "Config & Deployment - HSTS",
-        question: "فعال بودن HSTS روی دامنه چه کمکی می‌کند؟",
-        options: [
-          "جلوگیری از کش شدن صفحات",
-          "اجبار مرورگر به استفاده از HTTPS و جلوگیری از Downgrade به HTTP",
-          "افزایش سرعت DNS",
-          "فعال کردن HTTP/2"
-        ],
-        correctIndex: 1,
-        explanation:
-          "HSTS تضمین می‌کند که مرورگر فقط از HTTPS استفاده کند و جلوی حملات مثل SSL Stripping را می‌گیرد."
-      },
-      {
-        topic: "Config & Deployment - Subdomain & CSP",
-        question: "کدام مورد با تست‌های Subdomain Takeover، Cloud Storage و Content Security Policy مرتبط است؟",
-        options: [
-          "آسیب‌پذیری در فرانت‌اند فقط",
-          "دامنه‌ها و باکت‌های رهاشده، و سیاست‌های محتوا برای محدود کردن منابع اسکریپت",
-          "فقط تنظیم کوکی‌ها",
-          "فقط انتخاب فونت"
-        ],
-        correctIndex: 1,
-        explanation:
-          "ساب‌دامین یا باکت ابری رهاشده می‌تواند توسط مهاجم تصاحب شود و CSP برای محدودکردن لود اسکریپت و کاهش ریسک XSS استفاده می‌شود."
-      },
-
-      // ==========================
-      // 4.3 Identity Management
-      // ==========================
-      {
-        topic: "Identity Management - Roles",
-        question: "در تست Role Definitions چه چیزی بررسی می‌شود؟",
-        options: [
-          "اینکه همه کاربران دسترسی ادمین داشته باشند",
-          "تعریف واضح نقش‌ها، تفکیک سطح دسترسی و نبود نقش‌های بیش‌ازحد قدرتمند",
-          "فقط نام‌گذاری زیبا برای نقش‌ها",
-          "اتصال مستقیم نقش‌ها به IP"
-        ],
-        correctIndex: 1,
-        explanation:
-          "نقش‌ها باید کمترین سطح دسترسی لازم (Least Privilege) را داشته باشند و مرز بین آنها مشخص و قابل اعمال باشد."
-      },
-      {
-        topic: "Identity Management - Registration",
-        question: "کدام مورد نشان‌دهنده ضعف در فرایند ثبت‌نام (User Registration) است؟",
-        options: [
-          "تأیید ایمیل کاربر قبل از فعال‌شدن حساب",
-          "امکان ساختن تعداد زیادی حساب بدون محدودیت یا اعتبارسنجی",
-          "الزام به استفاده از پسورد قوی",
-          "استفاده از CAPTCHA"
-        ],
-        correctIndex: 1,
-        explanation:
-          "عدم محدودیت یا اعتبارسنجی مناسب در ثبت‌نام می‌تواند به ساخت ربات‌گونه حساب‌ها و سوءاستفاده از سرویس منجر شود."
-      },
-      {
-        topic: "Identity Management - Provisioning",
-        question: "کدام گزینه بخشی از تست Account Provisioning است؟",
-        options: [
-          "تغییر رنگ دکمه ثبت‌نام",
-          "بررسی فرایند ایجاد، تغییر نقش و غیرفعال‌سازی حساب‌ها",
-          "بررسی سرعت لاگین",
-          "فقط چک کردن صفحه پروفایل"
-        ],
-        correctIndex: 1,
-        explanation:
-          "باید مطمئن شد حساب‌های غیرفعال/اخراج‌شده دسترسی نداشته باشند و تغییر نقش‌ها کنترل‌شده باشد."
-      },
-      {
-        topic: "Identity Management - Enumeration",
-        question: "کدام رفتار نشانه Account Enumeration است؟",
-        options: [
-          "نمایش یک پیام خطای عمومی مثل «اطلاعات ورود نامعتبر است» برای همه حالات",
-          "نمایش پیام‌های متفاوت برای «نام کاربری وجود ندارد» و «رمز اشتباه است»",
-          "استفاده از CAPTCHA",
-          "استفاده از HTTPS"
-        ],
-        correctIndex: 1,
-        explanation:
-          "پیام‌های متفاوت به مهاجم کمک می‌کند بفهمد کدام نام‌کاربری معتبر است و بعداً روی رمز آن تمرکز کند."
-      },
-      {
-        topic: "Identity Management - Username Policy",
-        question: "هدف از تست «Weak or Unenforced Username Policy» چیست؟",
-        options: [
-          "بررسی زیبایی نام‌کاربری",
-          "جلوگیری از نام‌کاربری‌های قابل حدس یا شبیه هم که به Enumeration و سوءاستفاده کمک می‌کنند",
-          "افزایش سرعت لاگین",
-          "اجبار کاربر به انتخاب نام‌کاربری بسیار بلند"
-        ],
-        correctIndex: 1,
-        explanation:
-          "الگوی یکنواخت و قابل‌حدس (مثلاً شماره پرسنلی بدون هیچ پیچیدگی) می‌تواند حدس نام‌کاربری را بسیار آسان کند."
-      },
-
-      // =====================
-      // 4.4 Authentication
-      // =====================
-      {
-        topic: "Authentication - Encrypted Channel",
-        question: "در تست «Credentials over Encrypted Channel» چه چیزی مهم است؟",
-        options: [
-          "استفاده از HTTP ساده روی همه صفحات",
-          "استفاده از TLS معتبر برای ارسال فرم لاگین و جلوگیری از ارسال رمز روی HTTP",
-          "مخفی‌کردن فرم لاگین در یک مودال",
-          "استفاده از فونت آیکون برای دکمه لاگین"
-        ],
-        correctIndex: 1,
-        explanation:
-          "رمز عبور و توکن‌ها باید فقط روی کانال رمزنگاری‌شده (HTTPS) ارسال شوند تا شنود و دست‌کاری سخت شود."
-      },
-      {
-        topic: "Authentication - Default Credentials",
-        question: "کدام مثال از ضعف «Default Credentials» است؟",
-        options: [
-          "تغییر پسورد پیش‌فرض همه سرویس‌ها",
-          "رهاکردن پسورد admin/admin روی پنل مدیریت",
-          "استفاده از MFA",
-          "غیرفعال کردن لاگین از راه دور"
-        ],
-        correctIndex: 1,
-        explanation:
-          "حساب‌های با پسورد پیش‌فرض کاملاً شناخته‌شده‌اند و باید یا غیرفعال یا پسوردشان تغییر داده شود."
-      },
-      {
-        topic: "Authentication - Lockout",
-        question: "کدام گزینه ضعف در مکانیزم Lockout محسوب می‌شود؟",
-        options: [
-          "قفل کردن موقت بعد از چند تلاش ناموفق",
-          "عدم وجود محدودیت روی تعداد تلاش‌های لاگین",
-          "گزارش تلاش‌های مشکوک",
-          "استفاده از MFA"
-        ],
-        correctIndex: 1,
-        explanation:
-          "بدون محدودیت تلاش، مهاجم می‌تواند حمله بروت‌فورس یا Credential Stuffing را به‌راحتی انجام دهد."
-      },
-      {
-        topic: "Authentication - Bypass",
-        question: "«Bypassing Authentication Schema» معمولاً چه چیزی را هدف می‌گیرد؟",
-        options: [
-          "دورزدن کامل لایه احراز هویت با استفاده از مسیرها یا پارامترهای خاص",
-          "تغییر رنگ پس‌زمینه صفحه لاگین",
-          "افزایش کارایی دیتابیس",
-          "بهبود UX فرم"
-        ],
-        correctIndex: 0,
-        explanation:
-          "گاهی برخی URLها یا APIها چک لاگین را انجام نمی‌دهند و کاربر بدون احراز هویت می‌تواند به آن‌ها دسترسی پیدا کند."
-      },
-      {
-        topic: "Authentication - Remember Me",
-        question: "در تست Remember Password/Remember Me چه ریسکی بررسی می‌شود؟",
-        options: [
-          "بهینه‌سازی کارایی سرور",
-          "ذخیره‌شدن توکن‌های بلندمدت ناامن در کوکی بدون محدودیت و محافظت کافی",
-          "نمایش اشتباه پیام‌های خطا",
-          "تغییر رنگ دکمه‌ها"
-        ],
-        correctIndex: 1,
-        explanation:
-          "توکن‌های Remember Me باید امن، قابل ابطال و محدود به دستگاه و زمان باشند، در غیر این صورت در صورت سرقت کوکی می‌توانند باعث تصاحب حساب شوند."
-      },
-      {
-        topic: "Authentication - Browser Cache",
-        question: "ضعف در Browser Cache هنگام لاگین معمولاً چیست؟",
-        options: [
-          "کش‌نشدن تصاویر",
-          "کش‌شدن صفحات حساس (مثل dashboard) به‌طوری که بعد از خروج، با Back مرورگر قابل مشاهده باشند",
-          "عدم استفاده از Service Worker",
-          "استفاده از فونت سفارشی"
-        ],
-        correctIndex: 1,
-        explanation:
-          "صفحات حساس باید با هدرهای مناسب (no-store, no-cache) محافظت شوند تا بعد از logout امکان مشاهده آن‌ها از کش نباشد."
-      },
-      {
-        topic: "Authentication - Password Policy",
-        question: "کدام مورد نشان‌دهنده Password Policy ضعیف است؟",
-        options: [
-          "حداقل طول ۱۲ کاراکتر و بررسی پیچیدگی",
-          "امکان انتخاب رمز 123456 بدون هیچ محدودیتی",
-          "اجبار به تغییر دوره‌ای رمز در کنار MFA",
-          "عدم ذخیره رمز به صورت متن واضح"
-        ],
-        correctIndex: 1,
-        explanation:
-          "رمزهای بسیار ساده و کوتاه به‌راحتی حدس زده یا در حمله دیکشنری شکسته می‌شوند."
-      },
-      {
-        topic: "Authentication - Reset Functions",
-        question: "در تست Password Reset چه چیزی مهم‌تر است؟",
-        options: [
-          "استفاده از لینک ریست زمان‌دار و یکتا که فقط یکبار قابل استفاده باشد",
-          "فرستادن رمز جدید ثابت برای همه کاربران",
-          "عدم نیاز به تأیید ایمیل",
-          "نمایش رمز قبلی روی صفحه"
-        ],
-        correctIndex: 0,
-        explanation:
-          "لینک ریست باید یکتا، دارای مدت انقضا و پس از استفاده باطل شود تا حملات بازپخش و سوءاستفاده کاهش یابد."
-      },
-
-      // =====================
-      // 4.5 Authorization
-      // =====================
-      {
-        topic: "Authorization - Directory Traversal",
-        question: "کدام مثال از ضعف Directory Traversal/File Include است؟",
-        options: [
-          "پارامتر فایل اجازه دهد ../../etc/passwd خوانده شود",
-          "فقط لود کردن تصاویر از CDN",
-          "وجود HSTS",
-          "استفاده از CSP"
-        ],
-        correctIndex: 0,
-        explanation:
-          "اگر ورودی کاربر مستقیماً در مسیر فایل استفاده شود و نرمال‌سازی نشود، امکان خواندن فایل‌های خارج از دایرکتوری مجاز به وجود می‌آید."
-      },
-      {
-        topic: "Authorization - Bypass Access Control",
-        question: "Broken Authorization اغلب چگونه خود را نشان می‌دهد؟",
-        options: [
-          "کاربر عادی می‌تواند با فراخوانی مستقیم یک URL ادمین، عملیات مدیریتی انجام دهد",
-          "کاربر نمی‌تواند لاگین کند",
-          "HTTPS روی سایت فعال نیست",
-          "فونت‌ها لود نمی‌شوند"
-        ],
-        correctIndex: 0,
-        explanation:
-          "اگر چک نقش و دسترسی فقط روی UI انجام شود و سرور آن را بررسی نکند، کاربر با دستکاری URL یا پارامترها می‌تواند مجوز را دور بزند."
-      },
-      {
-        topic: "Authorization - Privilege Escalation",
-        question: "Privilege Escalation یعنی چه؟",
-        options: [
-          "کاهش دسترسی کاربر",
-          "افزایش غیرمجاز سطح دسترسی از کاربر عادی به نقش‌های بالاتر مانند ادمین",
-          "تنها تغییر رمز عبور",
-          "بهبود کارایی برنامه"
-        ],
-        correctIndex: 1,
-        explanation:
-          "با سوءاستفاده از ضعف‌ها می‌توان نقش یا مجوز کاربر را بدون اجازه سیستم افزایش داد."
-      },
-      {
-        topic: "Authorization - IDOR",
-        question: "در IDOR چه چیزی معمولاً اتفاق می‌افتد؟",
-        options: [
-          "کاربر می‌تواند تنها اطلاعات خود را ببیند",
-          "کاربر با تغییر ID در URL یا پارامتر، به داده کاربر دیگر دسترسی پیدا می‌کند",
-          "کاربر نمی‌تواند لاگین کند",
-          "همیشه خطای 500 برمی‌گردد"
-        ],
-        correctIndex: 1,
-        explanation:
-          "در IDOR سرور فقط ID را می‌پذیرد ولی بررسی نمی‌کند صاحب آن منبع چه کسی است؛ بنابراین کاربر می‌تواند رکوردهای دیگران را بخواند یا تغییر دهد."
-      },
-
-      // =========================
-      // 4.6 Session Management
-      // =========================
-      {
-        topic: "Session - Schema Bypass",
-        question: "Bypassing Session Management Schema یعنی چه؟",
-        options: [
-          "دورزدن کامل مکانیزم سشن (مثلاً استفاده از پارامتر دیگر به‌جای کوکی برای اعتبارسنجی)",
-          "افزایش سرعت کش",
-          "غیرفعال‌کردن کوکی‌ها",
-          "استفاده از فونت جدید"
-        ],
-        correctIndex: 0,
-        explanation:
-          "اگر اپلیکیشن چند روش اعتبارسنجی داشته باشد و همه به یک اندازه محافظت نشده باشند، مهاجم می‌تواند از روش ضعیف‌تر استفاده کند."
-      },
-      {
-        topic: "Session - Cookie Attributes",
-        question: "کدام ترکیب برای کوکی سشن امن‌تر است؟",
-        options: [
-          "بدون HttpOnly و Secure",
-          "HttpOnly + Secure + SameSite مناسب",
-          "در دسترس بودن در جاوااسکریپت برای همه اسکریپت‌ها",
-          "ارسال روی HTTP و HTTPS"
-        ],
-        correctIndex: 1,
-        explanation:
-          "HttpOnly مانع خوانده شدن کوکی توسط JS، Secure مانع ارسال آن روی HTTP و SameSite ریسک CSRF را کاهش می‌دهد."
-      },
-      {
-        topic: "Session - Fixation",
-        question: "Session Fixation چه خطری دارد؟",
-        options: [
-          "تنها باعث کندی برنامه می‌شود",
-          "مهاجم می‌تواند سشن قربانی را پیشاپیش تعیین کند و بعد از لاگین از همان شناسه استفاده کند",
-          "فقط روی فرانت‌اند اثر دارد",
-          "فقط برای API است"
-        ],
-        correctIndex: 1,
-        explanation:
-          "باید بعد از لاگین شناسه سشن عوض شود تا اگر شناسه قبلاً به دست مهاجم افتاده بود، دیگر معتبر نباشد."
-      },
-      {
-        topic: "Session - Exposed Variables",
-        question: "Exposed Session Variables یعنی چه؟",
-        options: [
-          "نمایش متغیرهای سشن در URL، HTML یا جاوااسکریپت",
-          "استفاده از کوکی HttpOnly",
-          "غیرفعال بودن کش",
-          "استفاده از TLS"
-        ],
-        correctIndex: 0,
-        explanation:
-          "اگر داده حساس سشن در کلاینت به‌طور غیرضروری افشا شود، امکان سرقت و سوءاستفاده وجود دارد."
-      },
-      {
-        topic: "Session - CSRF",
-        question: "برای کاهش ریسک CSRF در درخواست‌های حساس، چه راهکاری مناسب‌تر است؟",
-        options: [
-          "فقط استفاده از HTTPS",
-          "استفاده از CSRF Token یکتا و اعتبارسنجی آن در سرور + SameSite روی کوکی سشن",
-          "استفاده از فونت سفارشی",
-          "لاگ‌گرفتن از خطاها"
-        ],
-        correctIndex: 1,
-        explanation:
-          "CSRF Token جلوی ارسال خودکارِ درخواست معتبر بدون آگاهی کاربر را می‌گیرد؛ SameSite هم از ارسال کوکی از دامنه‌های دیگر جلوگیری می‌کند."
-      },
-      {
-        topic: "Session - Logout & Timeout",
-        question: "کدام گزینه رفتار امن‌تری برای Logout/Timeout است؟",
-        options: [
-          "عدم حذف سشن روی سرور و فقط مخفی‌کردن دکمه‌ها",
-          "پاک‌کردن سشن روی سرور، حذف کوکی و انقضای معقول برای عدم فعالیت",
-          "فقط بستن تب مرورگر",
-          "عدم نمایش پیام خروج"
-        ],
-        correctIndex: 1,
-        explanation:
-          "Logout باید سشن سرور را از بین ببرد و Timeout برای نشست‌های بدون فعالیت اعمال شود."
-      },
-      {
-        topic: "Session - Session Puzzling",
-        question: "Session Puzzling معمولاً چه مشکلی را توصیف می‌کند؟",
-        options: [
-          "چند بخش از حالت کاربر در متغیرهای مختلف ذخیره شود و ترکیب غیرمنتظره آنها منجر به وضعیت ناامن شود",
-          "فقط تغییر فونت‌ها",
-          "فقط مشکل کارایی",
-          "فقط مشکل در ظاهر UI"
-        ],
-        correctIndex: 0,
-        explanation:
-          "وقتی وضعیت کاربر در پارامترهای مختلف نگه‌داری شود، ترکیب برخی مقادیر ممکن است بدون قصد طراح، دسترسی اضافی ایجاد کند."
-      },
-
-      // =======================
-      // 4.7 Input Validation
-      // =======================
-      {
-        topic: "Input Validation - Reflected XSS",
-        question: "در Reflected XSS چه اتفاقی می‌افتد؟",
-        options: [
-          "اسکریپت مخرب در دیتابیس ذخیره می‌شود",
-          "اسکریپت از ورودی کاربر گرفته و بلافاصله در پاسخ بازتاب می‌شود",
-          "فقط CSS تغییر می‌کند",
-          "هیچ چیز خاصی رخ نمی‌دهد"
-        ],
-        correctIndex: 1,
-        explanation:
-          "ورودی بدون Escape مناسب در پاسخ HTML تزریق می‌شود و مرورگر آن را به عنوان کد اجرا می‌کند."
-      },
-      {
-        topic: "Input Validation - Stored XSS",
-        question: "در Stored XSS کدام مورد درست است؟",
-        options: [
-          "کد مخرب در منبع دائمی (مثل دیتابیس) ذخیره می‌شود و به همه نمایش داده می‌شود",
-          "فقط برای درخواست‌های GET اتفاق می‌افتد",
-          "فقط روی HTTPS ممکن است",
-          "ربطی به ورودی کاربر ندارد"
-        ],
-        correctIndex: 0,
-        explanation:
-          "در Stored XSS، هر کاربری که آن محتوا را می‌بیند، اسکریپت را اجرا می‌کند؛ بنابراین اثر آن گسترده‌تر است."
-      },
-      {
-        topic: "Input Validation - HTTP Verb Tampering",
-        question: "HTTP Verb Tampering چیست؟",
-        options: [
-          "تغییر روش درخواست (GET/POST/PUT/…) برای دورزدن قوانین امنیتی سمت سرور",
-          "تغییر DNS",
-          "تغییر User-Agent",
-          "تغییر اندازه پکت‌ها"
-        ],
-        correctIndex: 0,
-        explanation:
-          "گاه برخی متدها توسط فایروال یا فریم‌ورک متفاوت پردازش می‌شوند و با تغییر متد می‌توان محدودیت‌ها را دور زد."
-      },
-      {
-        topic: "Input Validation - HTTP Parameter Pollution",
-        question: "HTTP Parameter Pollution چه ریسکی دارد؟",
-        options: [
-          "افزایش سرعت پاسخ‌گویی",
-          "ارسال چندبار یک پارامتر با مقادیر مختلف برای تغییر منطق سمت سرور",
-          "بهبود لاگ‌ها",
-          "بهبود SEO"
-        ],
-        correctIndex: 1,
-        explanation:
-          "رفتار فریم‌ورک با پارامترهای تکراری (اولی، آخری، لیست) می‌تواند منطق امنیتی را دور بزند."
-      },
-      {
-        topic: "Input Validation - SQL Injection",
-        question: "کدام گزینه برای کاهش SQL Injection مناسب‌تر است؟",
-        options: [
-          "چسباندن مستقیم ورودی کاربر به رشته کوئری",
-          "استفاده از Prepared Statement و پارامتر بایند‌شده",
-          "فقط فیلتر کردن کاراکتر '",
-          "استفاده از HTTP فقط"
-        ],
-        correctIndex: 1,
-        explanation:
-          "Prepared Statement باعث می‌شود ورودی به عنوان داده تفسیر شود نه بخشی از دستور SQL."
-      },
-      {
-        topic: "Input Validation - NoSQL/LDAP/ORM",
-        question: "ویژگی مشترک تزریق NoSQL، LDAP و ORM چیست؟",
-        options: [
-          "همه فقط روی پایگاه‌داده Oracle رخ می‌دهند",
-          "ناشی از استفاده مستقیم ورودی کاربر در عبارات کوئری یا فیلتر بدون اعتبارسنجی است",
-          "فقط در سمت کلاینت رخ می‌دهند",
-          "ربطی به ورودی کاربر ندارند"
-        ],
-        correctIndex: 1,
-        explanation:
-          "هرجا ورودی در ساختار کوئری (JSON، فیلترهای ORM، فیلتر LDAP) قرار گیرد باید اعتبارسنجی و ایمن شود."
-      },
-      {
-        topic: "Input Validation - XML/XXE/XPath",
-        question: "در تست XML/XPath Injection و XXE معمولاً چه نکته‌ای مهم است؟",
-        options: [
-          "فعال بودن DTD و external entities بدون نیاز",
-          "استفاده از فقط JSON",
-          "استفاده از CSS",
-          "غیرفعال‌کردن HTTPS"
-        ],
-        correctIndex: 0,
-        explanation:
-          "پارسر XML باید طوری تنظیم شود که DTD و entityهای خارجی غیرفعال باشند تا از XXE و افشای فایل‌ها جلوگیری شود."
-      },
-      {
-        topic: "Input Validation - SSI & Command Injection",
-        question: "کدام مورد نمونه ورودی خطرناک برای Command/SSI Injection است؟",
-        options: [
-          "ورودی محدودشده به حروف الفبا",
-          "ورودی که مستقیماً در یک دستور سیستم‌عامل یا دستور سمت‌سرور بدون Escape استفاده می‌شود",
-          "فقط اعداد مثبت",
-          "فقط true/false"
-        ],
-        correctIndex: 1,
-        explanation:
-          "هرجا ورودی وارد دستور shell یا directive سرور شود باید کاملاً محدود و Escape شود یا از API امن استفاده شود."
-      },
-      {
-        topic: "Input Validation - File Inclusion",
-        question: "Local/Remote File Inclusion چه مشکلی ایجاد می‌کند؟",
-        options: [
-          "فقط زیبایی UI را خراب می‌کند",
-          "امکان اجرای کد یا افشای فایل‌ها با لود کردن فایل‌های غیرمجاز",
-          "فقط سرعت سرور را کم می‌کند",
-          "تنها روی موبایل رخ می‌دهد"
-        ],
-        correctIndex: 1,
-        explanation:
-          "اگر مسیر فایل از ورودی کاربر بیاید، مهاجم ممکن است فایل‌های حساس یا فایل‌های خودش را شامل کند."
-      },
-      {
-        topic: "Input Validation - Buffer/Overflow & Smuggling",
-        question: "کدام گزینه از اهداف تست Buffer Overflow و HTTP Splitting/Smuggling است؟",
-        options: [
-          "بهبود UX",
-          "شناسایی رفتار غیرمنتظره سرور هنگام دریافت داده‌های غیرعادی یا ساختار هدرهای دستکاری‌شده",
-          "افزایش سرعت شبکه",
-          "افزایش کیفیت تصویر"
-        ],
-        correctIndex: 1,
-        explanation:
-          "داده‌های با طول یا ساختار خاص می‌توانند باعث رفتار غیرمنتظره، دورزدن فایروال یا حتی اجرای کد شوند."
-      },
-
-      // ==========================
-      // 4.8 Error Handling Testing
-      // ==========================
-      {
-        topic: "Error Handling - Codes",
-        question: "چرا تحلیل کدهای خطا (Error Codes) مهم است؟",
-        options: [
-          "فقط برای UX",
-          "چون خطاهای دقیق (مثل تفاوت بین «کاربر وجود ندارد» و «رمز اشتباه است») می‌توانند به Enumeration کمک کنند",
-          "برای بهبود SEO",
-          "برای افزایش سرعت"
-        ],
-        correctIndex: 1,
-        explanation:
-          "پیام خطای بیش‌ازحد دقیق ممکن است اطلاعاتی مثل وجود حساب، ساختار دیتابیس یا مسیر فایل‌ها را لو بدهد."
-      },
-      {
-        topic: "Error Handling - Stack Traces",
-        question: "نمایش Stack Trace خام به کاربر چه ریسکی دارد؟",
-        options: [
-          "هیچ ریسکی ندارد",
-          "می‌تواند نام کلاس‌ها، مسیر فایل‌ها و جزئیات پیاده‌سازی را افشا کند",
-          "فقط UI را بد می‌کند",
-          "اجرای جاوااسکریپت را متوقف می‌کند"
-        ],
-        correctIndex: 1,
-        explanation:
-          "Stack Trace اطلاعات داخلی ارزشمندی در اختیار مهاجم می‌گذارد و باید در لاگ سرور بماند نه در خروجی کاربر."
-      },
-
-      // ===========================
-      // 4.9 Weak Cryptography
-      // ===========================
-      {
-        topic: "Cryptography - TLS",
-        question: "کدام گزینه نشان‌دهنده تنظیمات ضعیف SSL/TLS است؟",
-        options: [
-          "استفاده از TLS 1.2+ و غیرفعال‌کردن نسخه‌های قدیمی",
-          "فعال‌بودن پروتکل‌های قدیمی مثل SSLv3 و cipherهای ضعیف",
-          "استفاده از HSTS",
-          "استفاده از گواهی معتبر"
-        ],
-        correctIndex: 1,
-        explanation:
-          "نسخه‌ها و cipherهای قدیمی می‌توانند در برابر حملات شناخته‌شده آسیب‌پذیر باشند و باید غیرفعال شوند."
-      },
-      {
-        topic: "Cryptography - Padding Oracle",
-        question: "در حملات Padding Oracle معمولاً چه چیزی سوءاستفاده می‌شود؟",
-        options: [
-          "نحوه نمایش فونت‌ها",
-          "پیام‌های خطای متفاوت هنگام رمزگشایی بلاک‌های رمز شده",
-          "تنظیمات DNS",
-          "هدر User-Agent"
-        ],
-        correctIndex: 1,
-        explanation:
-          "اگر برنامه هنگام رمزگشایی پیام‌های نادرست رفتار متفاوتی نشان دهد، مهاجم می‌تواند با آزمون و خطا به متن اصلی نزدیک شود."
-      },
-      {
-        topic: "Cryptography - Data in Transit",
-        question: "برای جلوگیری از ارسال اطلاعات حساس روی کانال ناامن چه چیزی ضروری است؟",
-        options: [
-          "فقط مخفی‌کردن فیلدها با CSS",
-          "استفاده از HTTPS روی تمام مسیرهای حساس و جلوگیری از ارسال روی HTTP",
-          "استفاده از فونت آیکون",
-          "گذاشتن لوگو"
-        ],
-        correctIndex: 1,
-        explanation:
-          "رمزگذاری کانال (TLS) باید سراسری روی مسیرهای ورود، تراکنش و APIهای حساس اعمال شود."
-      },
-
-      // ==========================
-      // 4.10 Business Logic Testing
-      // ==========================
-      {
-        topic: "Business Logic - Data Validation",
-        question: "نمونه‌ای از ضعف در Business Logic Data Validation چیست؟",
-        options: [
-          "اجازه تغییر مبلغ پرداخت به عدد منفی و دریافت پول از سیستم",
-          "نمایش پیام خطا",
-          "استفاده از HTTPS",
-          "استفاده از فونت سفارشی"
-        ],
-        correctIndex: 0,
-        explanation:
-          "منطق کسب‌وکار باید از مقادیر غیرمنطقی (مثل مبلغ منفی، تعداد بیش از حد مجاز و…) جلوگیری کند."
-      },
-      {
-        topic: "Business Logic - Forge Requests",
-        question: "Test Ability to Forge Requests به چه معناست؟",
-        options: [
-          "امکان ارسال درخواست‌های معتبر خارج از UI رسمی (مثلاً تکرار یا تغییر یک درخواست سابق)",
-          "فقط تست سرعت",
-          "فقط تست CSS",
-          "فقط تست فونت"
-        ],
-        correctIndex: 0,
-        explanation:
-          "اگر سیستم فقط روی سمت کلاینت محدودیت گذاشته باشد، مهاجم می‌تواند همان درخواست‌ها را خارج از UI بسازد و محدودیت‌ها را دور بزند."
-      },
-      {
-        topic: "Business Logic - Process Timing & Limits",
-        question: "کدام مورد مثال تست Process Timing و Limits است؟",
-        options: [
-          "سرعت لود تصاویر",
-          "چک اینکه یک عملیات (مثل برداشت پول) نتواند چندبار پشت سر هم بدون محدودیت انجام شود",
-          "فونت دکمه‌ها",
-          "رنگ پس‌زمینه"
-        ],
-        correctIndex: 1,
-        explanation:
-          "منطق باید جلوی تکرار سریع عملیات حساس یا سوءاستفاده از شرایط مسابقه‌ای را بگیرد."
-      },
-      {
-        topic: "Business Logic - Workflow Bypass",
-        question: "Circumvention of Workflows یعنی چه؟",
-        options: [
-          "پیروی کامل از فرایند تعریف‌شده",
-          "دورزدن مراحل الزامی (مثلاً رد کردن مرحله پرداخت و رفتن مستقیم به تأیید)",
-          "بهبود UX",
-          "کاهش لاگ‌ها"
-        ],
-        correctIndex: 1,
-        explanation:
-          "کاربر نباید بتواند با دستکاری درخواست‌ها، مراحل کلیدی را رد کرده یا از ترتیب تعریف‌شده خارج شود."
-      },
-      {
-        topic: "Business Logic - Mis-use & File Upload",
-        question: "در تست Application Mis-use و Upload Malicious Files چه چیزی بررسی می‌شود؟",
-        options: [
-          "صرفاً محدودیت تعداد کاراکتر",
-          "اینکه قابلیت‌هایی مثل آپلود فایل یا APIها برای مقاصد پیش‌بینی‌نشده (مثل آپلود وب‌شل یا حمله به دیگران) قابل استفاده نباشند",
-          "نوع فونت",
-          "رنگ دکمه"
-        ],
-        correctIndex: 1,
-        explanation:
-          "Business Logic باید از استفاده ابزاری و مخرب (مثل ذخیره بدافزار، سوءاستفاده از تخفیف‌ها) جلوگیری کند."
-      },
-
-      // ==========================
-      // 4.11 Client-side Testing
-      // ==========================
-      {
-        topic: "Client-side - DOM XSS",
-        question: "DOM-based XSS چه تفاوتی با XSS سنتی دارد؟",
-        options: [
-          "فقط روی HTTP رخ می‌دهد",
-          "تزریق و اجرای اسکریپت کاملاً در سمت کلاینت و جاوااسکریپت انجام می‌شود بدون دخالت مستقیم سرور",
-          "فقط در دیتابیس ذخیره می‌شود",
-          "ربطی به ورودی ندارد"
-        ],
-        correctIndex: 1,
-        explanation:
-          "در DOM XSS داده ورودی مستقیماً در DOM توسط جاوااسکریپت استفاده می‌شود (مثلاً innerHTML) و باعث اجرای اسکریپت می‌شود."
-      },
-      {
-        topic: "Client-side - JS Execution",
-        question: "در تست JavaScript Execution چه چیزی بررسی می‌شود؟",
-        options: [
-          "فقط سرعت JS",
-          "اینکه ورودی کاربر منجر به اجرای کد دلخواه در context دامنه نشود",
-          "نوع فونت‌ها",
-          "طول URL"
-        ],
-        correctIndex: 1,
-        explanation:
-          "باید مطمئن شد داده کاربر بدون Escape در eval، new Function، innerHTML و… استفاده نمی‌شود."
-      },
-      {
-        topic: "Client-side - HTML/CSS Injection",
-        question: "HTML/CSS Injection می‌تواند به چه چیزی منجر شود؟",
-        options: [
-          "فقط تغییر ظاهر",
-          "در برخی موارد، ترکیب با دیگر باگ‌ها و منجر شدن به XSS یا فیشینگ UI",
-          "بهبود SEO",
-          "افزایش سرعت"
-        ],
-        correctIndex: 1,
-        explanation:
-          "تزریق HTML/CSS می‌تواند کاربران را فریب دهد یا زمینه را برای حملات پیچیده‌تر فراهم کند."
-      },
-      {
-        topic: "Client-side - URL Redirect",
-        question: "خطر اصلی Client-side URL Redirect چیست؟",
-        options: [
-          "کندی اجرا",
-          "فیشینگ و هدایت کاربر به دامنه مخرب با استفاده از پارامتر redirect کنترل‌نشده",
-          "افزایش RAM",
-          "کاهش حجم پاسخ"
-        ],
-        correctIndex: 1,
-        explanation:
-          "Redirect مبتنی بر ورودی کاربر باید به لیست سفید دامنه‌ها محدود شود تا کاربر به سایت جعلی هدایت نشود."
-      },
-      {
-        topic: "Client-side - CORS",
-        question: "تست CORS در سمت کلاینت معمولاً چه چیزی را بررسی می‌کند؟",
-        options: [
-          "فونت‌ها",
-          "پیکربندی Access-Control-Allow-Origin و سایر هدرها برای جلوگیری از اشتراک‌گذاری ناامن داده با دامنه‌های غیرقابل‌اعتماد",
-          "رنگ پس‌زمینه",
-          "وجود لوگو"
-        ],
-        correctIndex: 1,
-        explanation:
-          "CORS باید طوری تنظیم شود که فقط دامنه‌های مجاز بتوانند به داده حساس دسترسی داشته باشند."
-      },
-      {
-        topic: "Client-side - Clickjacking",
-        question: "برای جلوگیری از Clickjacking کدام هدر مناسب است؟",
-        options: [
-          "X-Frame-Options یا frame-ancestors در CSP",
-          "X-Content-Type-Options",
-          "Referrer-Policy",
-          "ETag"
-        ],
-        correctIndex: 0,
-        explanation:
-          "این هدرها مانع لود شدن سایت در iframe دامنه‌های دیگر می‌شوند و جلوی حملات کلیک‌جکینگ را می‌گیرند."
-      },
-      {
-        topic: "Client-side - WebSockets",
-        question: "در تست WebSockets چه چیزی مهم‌تر است؟",
-        options: [
-          "فقط سرعت ارتباط",
-          "احراز هویت و مجوز روی کانال WebSocket و اعتبارسنجی پیام‌های دریافتی",
-          "فونت‌ها",
-          "استفاده از HTTP/1.1"
-        ],
-        correctIndex: 1,
-        explanation:
-          "WebSocket یک کانال دائمی است و باید همانند HTTP به‌درستی احراز هویت و اعتبارسنجی ورودی روی آن انجام شود."
-      },
-      {
-        topic: "Client-side - Web Messaging & Local Storage",
-        question: "در تست Web Messaging و Local Storage چه ریسک‌هایی بررسی می‌شود؟",
-        options: [
-          "فقط سرعت رندر",
-          "ارسال پیام‌های postMessage بدون اعتبارسنجی origin و ذخیره داده حساس در Local Storage بدون محافظت",
-          "تعداد کوکی‌ها",
-          "حجم CSS"
-        ],
-        correctIndex: 1,
-        explanation:
-          "Origin دریافت‌کننده/فرستنده پیام باید چک شود و Local Storage جای مناسبی برای نگه‌داری توکن‌های حساس نیست."
-      },
-
-      // ==================
-      // 4.12 API Testing
-      // ==================
-      {
-        topic: "API Testing - Auth & Rate Limit",
-        question: "کدام مورد برای امنیت API عمومی مهم‌تر است؟",
-        options: [
-          "فقط داشتن داکیومنت زیبا",
-          "احراز هویت مناسب (مثلاً توکن) و اعمال Rate Limiting روی endpointهای حساس",
-          "استفاده از فونت آیکون",
-          "هرگز استفاده نکردن از HTTPS"
-        ],
-        correctIndex: 1,
-        explanation:
-          "بدون احراز هویت و محدودیت نرخ، API به‌راحتی هدف حملات بروت‌فورس، Scraping و DoS قرار می‌گیرد."
-      },
-      {
-        topic: "API Testing - Input Validation",
-        question: "در تست Input Validation برای APIها چه نکته‌ای مهم است؟",
-        options: [
-          "اعتماد کامل به داده JSON چون از کلاینت می‌آید",
-          "اعتبارسنجی سرسخت روی همه فیلدهای JSON/XML مثل سایر ورودی‌ها",
-          "فقط اعتبارسنجی در فرانت‌اند",
-          "استفاده از فونت متفاوت"
-        ],
-        correctIndex: 1,
-        explanation:
-          "API هم سطح حمله ورودی است و نباید داده آن بدون اعتبارسنجی در منطق، دیتابیس یا سرویس‌های دیگر استفاده شود."
-      },
-      {
-        topic: "API Testing - Excessive Data Exposure",
-        question: "نمونه‌ای از Excessive Data Exposure در API چیست؟",
-        options: [
-          "برگرداندن فقط فیلدهای لازم به کلاینت",
-          "برگرداندن تمام ستون‌های جدول، شامل فیلدهای داخلی مثل is_admin و email حتی اگر UI از آن‌ها استفاده نکند",
-          "استفاده از HTTPS",
-          "استفاده از JSON"
-        ],
-        correctIndex: 1,
-        explanation:
-          "API نباید بیش از داده لازم را به کلاینت برگرداند؛ حتی اگر UI آن را نمایش ندهد، مهاجم می‌تواند پاسخ کامل را ببیند."
-      },
-      {
-        topic: "API Testing - Broken Function Level Auth",
-        question: "در APIها Broken Function Level Authorization چگونه دیده می‌شود؟",
-        options: [
-          "همه endpointها فقط خواندنی هستند",
-          "کاربر عادی می‌تواند با فراخوانی مستقیم endpoint ادمین (مثل /admin/deleteUser) آن را اجرا کند",
-          "استفاده از JSON",
-          "استفاده از TLS"
-        ],
-        correctIndex: 1,
-        explanation:
-          "هر endpoint باید جداگانه سطح دسترسی را بررسی کند، نه اینکه صرفاً به اعتماد فرانت‌اند تکیه شود."
-      }
+    const baseQuestions = [
+      { topic: "مفاهیم پایه", question: "کدام گزینه بهترین توصیف برای HTTPS است؟", options: ["نسخه سریع‌تر HTTP", "HTTP همراه با رمزنگاری و اعتبارسنجی گواهی", "ابزاری برای تغییر ظاهر سایت", "پروتکل مخصوص دانلود فایل"], correctIndex: 1, explanation: "HTTPS با استفاده از TLS داده‌ها را رمزنگاری می‌کند و جلوی شنود و دستکاری ترافیک را می‌گیرد." },
+      { topic: "اعتبارسنجی ورودی", question: "هدف اصلی اعتبارسنجی ورودی چیست؟", options: ["زیباتر شدن فرم‌ها", "جلوگیری از ورود داده‌های غیرمنتظره یا خطرناک به منطق برنامه", "افزایش حجم پاسخ", "فعال‌کردن کش مرورگر"], correctIndex: 1, explanation: "اعتبارسنجی ورودی کمک می‌کند داده فقط در قالب مورد انتظار وارد برنامه شود و احتمال تزریق کاهش یابد." },
+      { topic: "SQL Injection", question: "کدام روش برای کاهش SQL Injection مناسب‌تر است؟", options: ["چسباندن مستقیم ورودی کاربر به رشته کوئری", "استفاده از Prepared Statement", "فقط حذف فاصله‌ها", "تغییر فونت فرم"], correctIndex: 1, explanation: "Prepared Statement باعث می‌شود ورودی به عنوان داده پردازش شود، نه بخشی از دستور SQL." },
+      { topic: "XSS", question: "XSS معمولاً چه زمانی رخ می‌دهد؟", options: ["وقتی داده کاربر بدون خروجی امن در HTML یا DOM نمایش داده شود", "وقتی سرور خاموش باشد", "وقتی DNS خراب شود", "وقتی صفحه راست‌چین باشد"], correctIndex: 0, explanation: "اگر داده کاربر escape نشود، مرورگر می‌تواند آن را به عنوان کد اجرا کند." },
+      { topic: "احراز هویت", question: "کدام مورد به امنیت ورود کاربر کمک می‌کند؟", options: ["پسورد ساده و کوتاه", "استفاده از رمز عبور قوی و MFA", "نمایش رمز روی صفحه", "غیرفعال کردن لاگین امن"], correctIndex: 1, explanation: "رمز قوی و احراز هویت چندمرحله‌ای احتمال سوءاستفاده از حساب را کاهش می‌دهد." },
+      { topic: "Session", question: "بعد از لاگین، چرا باید Session ID تغییر کند؟", options: ["برای افزایش سرعت سایت", "برای کاهش احتمال Session Fixation", "برای حذف کوکی‌ها", "برای فعال‌کردن CSS"], correctIndex: 1, explanation: "با تغییر Session ID بعد از ورود، شناسه‌ای که شاید قبلاً لو رفته باشد دیگر قابل سوءاستفاده نیست." },
+      { topic: "CSRF", question: "بهترین راه پایه برای کاهش CSRF چیست؟", options: ["استفاده از رنگ متفاوت دکمه‌ها", "استفاده از CSRF Token و SameSite روی کوکی", "غیرفعال کردن HTML", "فقط افزایش اندازه فرم"], correctIndex: 1, explanation: "توکن CSRF جلوی ارسال ناخواسته درخواست معتبر از دامنه‌های دیگر را می‌گیرد." },
+      { topic: "هدرهای امنیتی", question: "کدام هدر برای کاهش Clickjacking مفید است؟", options: ["X-Frame-Options", "Server", "Content-Length", "Accept-Language"], correctIndex: 0, explanation: "X-Frame-Options یا frame-ancestors در CSP مانع نمایش سایت در iframe دامنه‌های دیگر می‌شوند." },
+      { topic: "مدیریت خطا", question: "نمایش Stack Trace خام به کاربر چه ریسکی دارد؟", options: ["فقط ظاهر صفحه را بهتر می‌کند", "اطلاعات داخلی برنامه را افشا می‌کند", "فقط سرعت سرور را افزایش می‌دهد", "هیچ اثری ندارد"], correctIndex: 1, explanation: "Stack Trace می‌تواند مسیر فایل‌ها، نام کلاس‌ها و جزئیات داخلی پیاده‌سازی را لو بدهد." },
+      { topic: "رمزنگاری", question: "کدام مورد نشانه تنظیم ضعیف TLS است؟", options: ["استفاده از نسخه‌های قدیمی و آسیب‌پذیر مثل SSLv3", "استفاده از HTTPS معتبر", "فعال بودن HSTS", "استفاده از گواهی معتبر"], correctIndex: 0, explanation: "پروتکل‌ها و cipherهای قدیمی باید غیرفعال شوند تا خطر حملات شناخته‌شده کم شود." },
+      { topic: "Business Logic", question: "نمونه‌ای از ضعف منطق کسب‌وکار چیست؟", options: ["اجازه دادن به مقدار منفی برای مبلغ پرداخت", "استفاده از HTTPS", "اعتبارسنجی فرم", "ذخیره امن رمز عبور"], correctIndex: 0, explanation: "منطق کسب‌وکار باید از ورودی‌های غیرمنطقی مثل مبلغ منفی یا تعداد غیرعادی جلوگیری کند." },
+      { topic: "API Security", question: "برای یک API عمومی، کدام ترکیب مهم‌تر است؟", options: ["فقط داکیومنت زیبا", "احراز هویت مناسب و Rate Limiting", "فونت اختصاصی", "حذف همه پاسخ‌های JSON"], correctIndex: 1, explanation: "API بدون احراز هویت و محدودیت نرخ، راحت‌تر هدف حملات خودکار و سوءاستفاده قرار می‌گیرد." }
     ];
 
-    // ------------------ منطق کوییز ------------------
-    let currentIndex = 0;
-    let score = 0;
-
+    const shuffleButton = document.getElementById("shuffle-btn");
+    const startButton = document.getElementById("start-btn");
+    const startScreen = document.getElementById("start-screen");
     const quizArea = document.getElementById("quiz-area");
     const progressFill = document.getElementById("progress-fill");
     const questionCounterLabel = document.getElementById("question-counter-label");
     const percentLabel = document.getElementById("percent-label");
+    const statTotal = document.getElementById("stat-total");
+
+    let questions = baseQuestions.slice();
+    let currentIndex = 0;
+    let score = 0;
+    let hasStarted = false;
+
+    statTotal.textContent = String(questions.length);
+
+    function shuffleArray(items) {
+      const copy = items.slice();
+      for (let index = copy.length - 1; index > 0; index -= 1) {
+        const swapIndex = Math.floor(Math.random() * (index + 1));
+        [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+      }
+      return copy;
+    }
+
+    function resetQuiz() {
+      currentIndex = 0;
+      score = 0;
+      quizArea.innerHTML = "";
+      progressFill.style.width = "0%";
+      questionCounterLabel.textContent = "آماده شروع";
+      percentLabel.textContent = "۰٪ پیشرفت";
+      quizArea.classList.add("hidden");
+      startScreen.classList.remove("hidden");
+      hasStarted = false;
+    }
 
     function renderQuestion() {
       if (currentIndex >= questions.length) {
@@ -1376,100 +611,75 @@
         return;
       }
 
-      const q = questions[currentIndex];
       const total = questions.length;
-      const current = currentIndex + 1;
-      const percent = Math.round((currentIndex / total) * 100);
-
-      questionCounterLabel.textContent = `سؤال ${current} از ${total}`;
-      percentLabel.textContent = `${percent}٪ پیشرفت`;
-      progressFill.style.width = `${percent}%`;
-
+      const question = questions[currentIndex];
+      const currentNumber = currentIndex + 1;
+      const progress = Math.round((currentIndex / total) * 100);
       const optionLetters = ["الف", "ب", "ج", "د"];
 
-      let optionsHtml = "";
-      q.options.forEach((opt, i) => {
-        optionsHtml += `
-          <button class="option-btn" data-index="${i}" type="button">
-            <span class="option-prefix">${optionLetters[i] ?? ""}</span>
-            <span class="option-text">${opt}</span>
-            <span class="option-state-dot"></span>
-          </button>
-        `;
-      });
+      questionCounterLabel.textContent = `سؤال ${currentNumber} از ${total}`;
+      percentLabel.textContent = `${progress}٪ پیشرفت`;
+      progressFill.style.width = `${progress}%`;
+
+      const optionsHtml = question.options.map((option, index) => `
+        <button class="option-btn" type="button" data-index="${index}">
+          <span class="option-index">${optionLetters[index] ?? ""}</span>
+          <span class="option-label">${option}</span>
+          <span class="option-state" aria-hidden="true"></span>
+        </button>
+      `).join("");
 
       quizArea.innerHTML = `
-        <section class="question-card">
-          <div class="question-meta">
-            <span>مبحث: <strong>${q.topic}</strong></span>
-            <span>${current} / ${total}</span>
+        <section class="question-card" aria-live="polite">
+          <div class="quiz-topbar">
+            <span class="badge">${question.topic}</span>
+            <span class="question-counter">${currentNumber} / ${total}</span>
           </div>
-          <div class="question-text">
-            ${q.question}
-          </div>
-          <div class="options">
-            ${optionsHtml}
-          </div>
-          <div class="explanation-wrapper" id="explanation-wrapper">
-            <div class="explanation-bubble">
-              <div class="explanation-title">
-                <span class="icon">💡</span>
-                <span>توضیح جواب صحیح</span>
-              </div>
-              <div id="explanation-text">
-              </div>
-            </div>
-          </div>
+          <p class="question-text">${question.question}</p>
+          <div class="options">${optionsHtml}</div>
+          <div class="feedback" id="feedback-box"></div>
         </section>
         <div class="controls">
-          <div class="score-pill" id="score-pill">
-            امتیاز فعلی: ${score} از ${questions.length}
-          </div>
-          <button class="primary-btn" id="next-btn" type="button" disabled>
-            <span>سؤال بعدی</span>
-            <span>➡️</span>
-          </button>
+          <div class="score-pill">امتیاز فعلی: <strong id="score-value">${score}</strong> از ${total}</div>
+          <button class="primary-btn" id="next-btn" type="button" disabled>سؤال بعدی</button>
         </div>
       `;
 
       const optionButtons = quizArea.querySelectorAll(".option-btn");
-      const explanationWrapper = document.getElementById("explanation-wrapper");
-      const explanationText = document.getElementById("explanation-text");
-      const nextBtn = document.getElementById("next-btn");
-
+      const feedbackBox = document.getElementById("feedback-box");
+      const nextButton = document.getElementById("next-btn");
+      const scoreValue = document.getElementById("score-value");
       let answered = false;
 
-      optionButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
+      optionButtons.forEach((button) => {
+        button.addEventListener("click", () => {
           if (answered) return;
           answered = true;
 
-          const chosenIndex = parseInt(btn.getAttribute("data-index"), 10);
-          const correctIndex = q.correctIndex;
+          const selectedIndex = Number(button.dataset.index);
+          const correctIndex = question.correctIndex;
 
-          optionButtons.forEach((b, idx) => {
-            b.classList.add("disabled");
-            if (idx === correctIndex) {
-              b.classList.add("correct");
-            }
+          optionButtons.forEach((optionButton, index) => {
+            optionButton.classList.add("disabled");
+            if (index === correctIndex) optionButton.classList.add("correct");
           });
 
-          if (chosenIndex === correctIndex) {
-            score++;
-            const scorePill = document.getElementById("score-pill");
-            scorePill.textContent = `امتیاز فعلی: ${score} از ${questions.length}`;
+          if (selectedIndex === correctIndex) {
+            score += 1;
+            scoreValue.textContent = String(score);
+            feedbackBox.innerHTML = `<strong>پاسخ درست بود.</strong> ${question.explanation}`;
           } else {
-            btn.classList.add("incorrect");
-            explanationText.textContent = q.explanation;
-            explanationWrapper.style.display = "block";
+            button.classList.add("incorrect");
+            feedbackBox.innerHTML = `<strong>پاسخ درست نیست.</strong> ${question.explanation}`;
           }
 
-          nextBtn.disabled = false;
+          feedbackBox.style.display = "block";
+          nextButton.disabled = false;
         });
       });
 
-      nextBtn.addEventListener("click", () => {
-        currentIndex++;
+      nextButton.addEventListener("click", () => {
+        currentIndex += 1;
         renderQuestion();
       });
     }
@@ -1477,47 +687,78 @@
     function renderResult() {
       const total = questions.length;
       const percent = Math.round((score / total) * 100);
+
       progressFill.style.width = "100%";
-      questionCounterLabel.textContent = `آزمون تمام شد`;
+      questionCounterLabel.textContent = "آزمون کامل شد";
       percentLabel.textContent = `${percent}٪ نتیجه`;
 
-      let levelMsg = "";
+      let resultTitle = "نتیجه آزمون";
+      let resultText = "";
+
       if (percent >= 85) {
-        levelMsg = "عالی! سطح دانش امنیت وب‌ات خیلی خوب است. 👏";
+        resultTitle = "عالی";
+        resultText = "سطح شما برای مفاهیم پایه و استاندارد امنیت وب بسیار خوب است.";
       } else if (percent >= 60) {
-        levelMsg = "خوب بود! با مرور دوباره مباحث می‌تونی به سطح حرفه‌ای برسی. 💪";
+        resultTitle = "خوب";
+        resultText = "در سطح قابل‌قبولی هستید. با مرور دوباره توضیحات، نتیجه بهتری می‌گیرید.";
       } else {
-        levelMsg = "نیاز به تمرین و مطالعه بیشتری داری؛ این آزمون را چند بار تکرار کن. 📚";
+        resultTitle = "نیاز به تمرین بیشتر";
+        resultText = "پیشنهاد می‌شود آزمون را دوباره انجام دهید و روی مفاهیم پایه تمرکز کنید.";
       }
 
+      const reviewHtml = questions.map((item, index) => `
+        <div class="review-item">
+          <strong>سؤال ${index + 1}:</strong> ${item.topic}<br />
+          پاسخ درست: ${item.options[item.correctIndex]}
+        </div>
+      `).join("");
+
       quizArea.innerHTML = `
-        <section class="question-card result-card">
-          <div class="result-score">${percent}٪</div>
-          <div class="result-badge">
-            <span>🧮</span>
-            <span>امتیاز: ${score} از ${total} سؤال</span>
+        <section class="question-card">
+          <div class="result-grid">
+            <div class="result-score">${percent}٪</div>
+            <h2 class="result-title">${resultTitle}</h2>
+            <p class="result-text">${resultText}</p>
+            <div class="score-pill" style="justify-content: center;">امتیاز نهایی: <strong>${score}</strong> از ${total}</div>
+            <div class="review-list">${reviewHtml}</div>
           </div>
-          <p class="result-msg">${levelMsg}</p>
-          <p class="result-msg">
-            این آزمون مباحث مختلفی مثل SQL Injection، XSS، CSRF، مدیریت سشن، CORS، SSRF، Misconfiguration و غیره را پوشش می‌دهد.
-          </p>
-          <button class="primary-btn" type="button" id="restart-btn">
-            <span>شروع دوباره آزمون</span>
-            <span>🔁</span>
-          </button>
         </section>
+        <div class="controls">
+          <button class="primary-btn" id="restart-btn" type="button">شروع دوباره</button>
+          <button class="ghost-btn" id="back-start-btn" type="button">بازگشت به صفحه شروع</button>
+        </div>
       `;
 
-      const restartBtn = document.getElementById("restart-btn");
-      restartBtn.addEventListener("click", () => {
+      document.getElementById("restart-btn").addEventListener("click", () => {
         currentIndex = 0;
         score = 0;
+        progressFill.style.width = "0%";
         renderQuestion();
+      });
+
+      document.getElementById("back-start-btn").addEventListener("click", () => {
+        resetQuiz();
       });
     }
 
-    // شروع
-    renderQuestion();
+    function startQuiz() {
+      if (!hasStarted) {
+        hasStarted = true;
+        startScreen.classList.add("hidden");
+        quizArea.classList.remove("hidden");
+        renderQuestion();
+      }
+    }
+
+    startButton.addEventListener("click", startQuiz);
+
+    shuffleButton.addEventListener("click", () => {
+      questions = shuffleArray(baseQuestions);
+      statTotal.textContent = String(questions.length);
+      resetQuiz();
+    });
+
+    resetQuiz();
   </script>
 </body>
 </html>
